@@ -91,4 +91,5 @@ public class CommonExceptionAdvice {
                 R.error(code, msg).requestId(MDC.get(Constant.REQUEST_ID_HEADER))
                 : ResponseEntity.status(status).body(msg);
     }
+
 }

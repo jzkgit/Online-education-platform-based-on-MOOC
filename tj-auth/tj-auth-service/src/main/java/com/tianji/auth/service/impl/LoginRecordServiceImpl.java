@@ -14,12 +14,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * <p>
  * 登录信息记录表 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-07-12
  */
 @Service
 public class LoginRecordServiceImpl extends ServiceImpl<LoginRecordMapper, LoginRecord> implements ILoginRecordService {
@@ -59,4 +54,5 @@ public class LoginRecordServiceImpl extends ServiceImpl<LoginRecordMapper, Login
         record.setIpv4(WebUtils.getRemoteAddr());
         saveAsync(record);
     }
+
 }

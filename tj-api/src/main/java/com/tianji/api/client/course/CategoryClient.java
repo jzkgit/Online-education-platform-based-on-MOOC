@@ -15,4 +15,5 @@ public interface CategoryClient {
      */
     @GetMapping("getAllOfOneLevel")
     List<CategoryBasicDTO> getAllOfOneLevel();
+
 }

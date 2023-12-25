@@ -49,6 +49,12 @@ public class AuthUtil {
         this.hashOps = stringRedisTemplate.boundHashOps(AUTH_PRIVILEGE_KEY);
     }
 
+
+    /**
+     * Token 解析
+     * @param token
+     * @return
+     */
     public R<LoginUserDTO> parseToken(String token) {
         // 1.校验token是否为空
         if(StringUtils.isBlank(token)){
@@ -91,6 +97,12 @@ public class AuthUtil {
         return R.ok(userDTO);
     }
 
+
+    /**
+     * 检查权限
+     * @param antPath
+     * @param r
+     */
     public void checkAuth(String antPath, R<LoginUserDTO> r){
         // 1.判断是否是需要权限的路径
         String matchPath = findMatchPath(antPath);
@@ -173,4 +185,5 @@ public class AuthUtil {
         // 4.更新版本
         this.privilegeVersion = currentVersion;
     }
+
 }

@@ -15,7 +15,9 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
     <dependencies>
+
         <dependency>
             <groupId>com.tianji</groupId>
             <artifactId>tj-api</artifactId>
@@ -69,7 +71,9 @@
             <artifactId>tj-auth-resource-sdk</artifactId>
             <version>1.0.0</version>
         </dependency>
+
     </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -89,4 +93,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

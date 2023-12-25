@@ -1,10 +1,6 @@
 package com.tianji.course.constants;
 
-/**
- * @author wusongsong
- * @since 2022/7/14 13:44
- * @version 1.0.0 1.0
- **/
+
 public class CourseConstants {
 
     public static final long CATEGORY_ROOT = 0;

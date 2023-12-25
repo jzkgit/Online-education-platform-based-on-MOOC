@@ -22,12 +22,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ *
  * 课程controller
  *
- * @ClassName CourseController
- * @Author wusongsong
- * @Date 2022/7/10 15:34
- * @Version
  **/
 @Api(tags = "课程相关接口")
 @RestController
@@ -226,4 +223,5 @@ public class CourseController {
     public CourseAndSectionVO queryCourseAndCatalogById(@PathVariable("id") Long courseId){
         return courseService.queryCourseAndCatalogById(courseId);
     }
+
 }

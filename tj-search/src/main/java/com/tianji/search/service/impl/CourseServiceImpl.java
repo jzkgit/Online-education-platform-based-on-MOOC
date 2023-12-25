@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+
 @Service
 public class CourseServiceImpl implements ICourseService {
 
@@ -50,4 +51,5 @@ public class CourseServiceImpl implements ICourseService {
         // 1.直接删除
         courseRepository.deleteByIds(courseIds);
     }
+
 }

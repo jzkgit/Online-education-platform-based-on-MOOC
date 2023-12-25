@@ -35,4 +35,5 @@ public class CoursePageQuery extends PageQuery {
     @DateTimeFormat(pattern = DateUtils.DEFAULT_DATE_TIME_FORMAT)
     @ApiModelProperty(value = "更新时间区间的结束时间", example = "2022-7-18 19:52:36")
     private LocalDateTime endTime;
+
 }

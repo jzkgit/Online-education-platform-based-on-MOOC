@@ -61,6 +61,7 @@ public class CategoryCache {
         return list;
     }
 
+
     public List<CategoryBasicDTO> queryCategoryByIds(List<Long> ids) {
         if (ids == null || ids.size() == 0) {
             return CollUtils.emptyList();
@@ -70,6 +71,7 @@ public class CategoryCache {
                 .map(map::get)
                 .collect(Collectors.toList());
     }
+
 
     public List<String> getNameByLv3Ids(List<Long> lv3Ids) {
         Map<Long, CategoryBasicDTO> map = getCategoryMap();
@@ -90,4 +92,5 @@ public class CategoryCache {
         CategoryBasicDTO lv1 = map.get(lv2.getParentId());
         return lv1.getName() + "/" + lv2.getName() + "/" + lv3.getName();
     }
+
 }

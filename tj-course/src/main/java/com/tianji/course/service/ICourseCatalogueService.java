@@ -11,12 +11,7 @@ import com.tianji.course.domain.vo.CataVO;
 import java.util.List;
 
 /**
- * <p>
  * 目录草稿 服务类
- * </p>
- *
- * @author wusongsong
- * @since 2022-07-19
  */
 public interface ICourseCatalogueService extends IService<CourseCatalogue> {
 

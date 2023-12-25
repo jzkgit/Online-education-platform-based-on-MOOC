@@ -42,12 +42,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 课程分类 服务实现类
- * </p>
- *
- * @author wusongsong
- * @since 2022-07-14
  */
 @Service
 @Slf4j

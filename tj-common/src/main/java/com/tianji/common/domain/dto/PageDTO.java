@@ -71,4 +71,5 @@ public class PageDTO<T> {
     public boolean isEmpty(){
         return list == null || list.size() == 0;
     }
+
 }

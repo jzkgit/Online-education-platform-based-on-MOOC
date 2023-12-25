@@ -30,9 +30,11 @@ public class UserInfoInterceptor implements HandlerInterceptor {
         }
     }
 
+
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 清理用户信息
         UserContext.removeUser();
     }
+
 }

@@ -11,4 +11,5 @@ public class InterestCategoryVO {
     private Long id;
     @ApiModelProperty(value = "分类名称", example = "Java")
     private String name;
+
 }

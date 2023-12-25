@@ -5,7 +5,6 @@ public interface AuthErrorInfo {
     interface Msg {
         String INVALID_STAFF_TYPE = "无效的账户类型";
 
-
         String INVALID_ROLE_ID = "绑定的角色不存在";
         String PRIVILEGE_EXISTS = "权限信息已存在";
         String PRIVILEGE_NOT_FOUND = "权限数据不存在";
@@ -24,4 +23,5 @@ public interface AuthErrorInfo {
         // 无效token
         int INVALID_TOKEN_CODE = 40102;
     }
+
 }

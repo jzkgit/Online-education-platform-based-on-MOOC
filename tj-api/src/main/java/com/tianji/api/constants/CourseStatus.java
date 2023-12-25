@@ -4,11 +4,7 @@ import com.tianji.common.enums.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * @author wusongsong
- * @since 2022/7/18 16:07
- * @version 1.0.0
- **/
+
 @Getter
 @AllArgsConstructor
 public enum CourseStatus implements BaseEnum {

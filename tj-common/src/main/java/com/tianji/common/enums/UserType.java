@@ -28,4 +28,5 @@ public enum UserType implements BaseEnum{
         }
         throw new BadRequestException(ErrorInfo.Msg.INVALID_USER_TYPE);
     }
+
 }

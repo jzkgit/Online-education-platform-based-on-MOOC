@@ -44,16 +44,20 @@ public class JwtSignerHolder {
             r -> new Thread(r, "AuthFetchJwkThread")
     );
 
+
     @PostConstruct
     public void init(){
         // 尝试获取jwk秘钥
         ses.submit(new MarkedRunnable(new JwkTask(discoveryClient)));
     }
 
+
     public void shutdown(){
         ses.shutdown();
         log.debug("销毁加载秘钥线程 AuthFetchJwkThread");
     }
+
+
     public static void sleep(long time){
         try {
             Thread.sleep(time);
@@ -61,6 +65,8 @@ public class JwtSignerHolder {
             e.printStackTrace();
         }
     }
+
+
     class JwkTask implements Runnable{
         private final DiscoveryClient discoveryClient;
 
@@ -107,4 +113,5 @@ public class JwtSignerHolder {
             shutdown();
         }
     }
+
 }

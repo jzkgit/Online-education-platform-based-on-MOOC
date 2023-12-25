@@ -42,7 +42,8 @@ class CourseRepositoryTest {
 
     @Test
     void findById() {
-        Optional<Course> op = repository.findById(1204101L);
+        Optional<Course> op = repository.
+                findById(1204101L);
         op.ifPresent(System.out::println);
     }
 

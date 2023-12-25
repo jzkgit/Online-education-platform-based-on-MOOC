@@ -28,4 +28,5 @@ public enum CommonStatus implements BaseEnum{
         CommonStatus status = of(value);
         return status.getDesc();
     }
+
 }

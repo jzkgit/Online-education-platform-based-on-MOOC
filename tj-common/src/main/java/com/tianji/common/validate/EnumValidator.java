@@ -40,4 +40,5 @@ public class EnumValidator implements ConstraintValidator<EnumValid, BaseEnum> {
         }
         return false;
     }
+
 }

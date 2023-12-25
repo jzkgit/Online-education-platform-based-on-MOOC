@@ -22,12 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * <p>
  * 文件表，可以是普通文件、图片等 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-30
  */
 @Slf4j
 @Service

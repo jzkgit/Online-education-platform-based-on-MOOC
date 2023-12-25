@@ -4,7 +4,7 @@ server:
     uri-encoding: UTF-8   #服务编码
 spring:
   profiles:
-    active: dev
+    active: dev #环境 —— 对应的文件
   application:
     name: user-service
   cloud:
@@ -27,9 +27,9 @@ tj:
     enable: true
     enableResponseWrap: true
     package-path: com.tianji.user.controller
-    title: 天机学堂 - 用户中心接口文档
+    title: 基于慕课的在线教育平台 - 用户中心接口文档
     description: 该服务用户管理、用户信息管理
-    contact-name: 传智教育·研究院
+    contact-name: kkk
     contact-url: http://www.itcast.cn/
     contact-email: zhanghuyi@itcast.cn
     version: v1.0

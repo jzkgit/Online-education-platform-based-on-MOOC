@@ -15,12 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * 内部服务接口调用
  *
- * @ClassName CourseInfoController
- * @Author wusongsong
- * @Date 2022/7/18 15:19
- * @Version
  **/
 @RestController
 @RequestMapping("course")

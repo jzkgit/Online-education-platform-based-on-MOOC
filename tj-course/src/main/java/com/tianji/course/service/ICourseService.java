@@ -14,12 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
  * 草稿课程 服务类
- * </p>
- *
- * @author wusongsong
- * @since 2022-07-20
  */
 public interface ICourseService extends IService<Course> {
 

@@ -36,4 +36,5 @@ public class LoadPrivilegeRunner{
             log.error("更新权限缓存数据失败！原因：{}", e.getMessage());
         }
     }
+
 }

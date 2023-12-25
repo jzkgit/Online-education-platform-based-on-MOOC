@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IdNameDTO {
+
     @ApiModelProperty("id")
     private Long id;
+
     @ApiModelProperty("name")
     private String name;
+
 }

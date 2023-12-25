@@ -34,12 +34,7 @@ import java.util.stream.Collectors;
 import static com.tianji.media.constants.FileErrorInfo.MEDIA_NOT_EXISTS;
 
 /**
- * <p>
  * 媒资表，主要是视频文件 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-30
  */
 @Service
 @RequiredArgsConstructor

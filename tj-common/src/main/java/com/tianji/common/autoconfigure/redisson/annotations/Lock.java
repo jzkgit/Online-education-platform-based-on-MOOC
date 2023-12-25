@@ -50,4 +50,5 @@ public @interface Lock {
      * 锁策略，包括5种，默认策略是 不断尝试获取锁，直到成功或超时，超时后抛出异常
      */
     LockStrategy lockStrategy() default LockStrategy.FAIL_AFTER_RETRY_TIMEOUT;
+
 }

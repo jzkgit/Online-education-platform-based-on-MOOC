@@ -28,11 +28,11 @@ tj:
   swagger:
     enable: true
     package-path: com.tianji.search.controller
-    title: 天机学堂 - 搜索系统接口文档
+    title: 基于慕课的在线教育平台 - 搜索系统接口文档
     description: 该服务包含课程搜索、兴趣推荐等相关功能
-    contact-name: 传智教育·研究院
-    contact-url: http://www.itcast.cn/
-    contact-email: zhanghuyi@itcast.cn
+    contact-name: kkk
+    contact-url: https://blog.csdn.net/qq_66862911?type=blog
+    contact-email: https://blog.csdn.net/qq_66862911?type=blog
     version: v1.0
     enableResponseWrap: true
   auth:

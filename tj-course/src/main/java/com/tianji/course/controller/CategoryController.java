@@ -22,11 +22,6 @@ import java.util.List;
 
 /**
  * 课程分类
- *
- * @ClassName CategoryController
- * @Author wusongsong
- * @Date 2022/7/10 11:16
- * @Version
  **/
 @RestController
 @Api(tags = "课程分类相关接口")

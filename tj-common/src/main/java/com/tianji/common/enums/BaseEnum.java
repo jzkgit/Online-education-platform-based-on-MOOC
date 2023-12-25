@@ -10,4 +10,5 @@ public interface BaseEnum {
         }
         return getValue() == value;
     }
+
 }

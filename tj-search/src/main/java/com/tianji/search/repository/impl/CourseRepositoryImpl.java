@@ -52,6 +52,7 @@ public class CourseRepositoryImpl implements CourseRepository {
         }
     }
 
+
     @Override
     public void deleteById(Long courseId) {
         try {
@@ -60,6 +61,7 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw new CommonException(SAVE_COURSE_ERROR, e);
         }
     }
+
 
     @Override
     public Optional<Course> findById(Long courseId) {
@@ -76,6 +78,7 @@ public class CourseRepositoryImpl implements CourseRepository {
         return Optional.of(JsonUtils.toBean(source, Course.class));
     }
 
+
     @Override
     public void updateById(Long courseId, Object... sources) {
         // 1.创建Request
@@ -89,6 +92,7 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw new CommonException(UPDATE_COURSE_STATUS_ERROR, e);
         }
     }
+
 
     @Override
     public void increment(Long courseId, String field, int amount) {
@@ -106,6 +110,7 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw new CommonException(UPDATE_COURSE_STATUS_ERROR, e);
         }
     }
+
 
     @Override
     public void incrementSold(List<Long> courseIds, int amount) {
@@ -130,6 +135,7 @@ public class CourseRepositoryImpl implements CourseRepository {
         }
     }
 
+
     @Override
     public void saveAll(List<Course> list) {
         // 1.创建BulkRequest
@@ -153,6 +159,7 @@ public class CourseRepositoryImpl implements CourseRepository {
         }
     }
 
+
     @Override
     public void deleteByIds(List<Long> courseIds) {
         // 1.创建BulkRequest
@@ -173,4 +180,5 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw new CommonException(SAVE_COURSE_ERROR, e);
         }
     }
+
 }

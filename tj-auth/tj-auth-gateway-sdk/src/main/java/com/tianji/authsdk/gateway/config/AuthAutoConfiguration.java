@@ -21,4 +21,5 @@ public class AuthAutoConfiguration {
     public AuthUtil authUtil(JwtSignerHolder jwtSignerHolder, StringRedisTemplate stringRedisTemplate){
         return new AuthUtil(jwtSignerHolder, stringRedisTemplate);
     }
+
 }

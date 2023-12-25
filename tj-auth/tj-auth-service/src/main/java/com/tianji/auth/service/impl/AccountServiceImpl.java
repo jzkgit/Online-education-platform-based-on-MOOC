@@ -15,12 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>
  * 账号表，平台内所有用户的账号、密码信息 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-16
  */
 @Slf4j
 @Service
@@ -50,6 +45,7 @@ public class AccountServiceImpl implements IAccountService{
         return token;
     }
 
+
     private String generateToken(LoginUserDTO detail) {
         // 2.2.生成access-token
         String token = jwtTool.createToken(detail);
@@ -66,6 +62,7 @@ public class AccountServiceImpl implements IAccountService{
                 .build();
         return token;
     }
+
 
     @Override
     public void logout() {
@@ -87,4 +84,5 @@ public class AccountServiceImpl implements IAccountService{
         // 2.生成新的access-token、refresh-token
         return generateToken(userDTO);
     }
+
 }

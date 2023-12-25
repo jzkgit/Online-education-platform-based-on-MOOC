@@ -23,6 +23,7 @@ public class ResourceInterceptorConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         // 1.添加用户信息拦截器
         registry.addInterceptor(new UserInfoInterceptor()).order(0);
         // 2.是否需要做登录拦截
@@ -49,4 +50,5 @@ public class ResourceInterceptorConfiguration implements WebMvcConfigurer {
                 "/doc.html"
         );
     }
+
 }

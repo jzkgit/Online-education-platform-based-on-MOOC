@@ -11,4 +11,5 @@ public interface ICourseService {
     void updateCourseSold(List<Long> courseId, int amount);
 
     void handleCourseDeletes(List<Long> courseIds);
+
 }

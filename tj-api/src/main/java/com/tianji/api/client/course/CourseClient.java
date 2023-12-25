@@ -19,6 +19,7 @@ public interface CourseClient {
     @GetMapping("/course/infoByTeacherIds")
     List<SubNumAndCourseNumDTO> infoByTeacherIds(@RequestParam("teacherIds") Iterable<Long> teacherIds);
 
+
     /**
      * 根据小节id获取小节对应的mediaId和课程id
      *
@@ -27,6 +28,7 @@ public interface CourseClient {
      */
     @GetMapping("/course/section/{id}")
     SectionInfoDTO sectionInfo(@PathVariable("id") Long sectionId);
+
 
     /**
      * 根据媒资Id列表查询媒资被引用的次数
@@ -46,6 +48,7 @@ public interface CourseClient {
     @GetMapping("/course/{id}/searchInfo")
     CourseSearchDTO getSearchInfo(@PathVariable("id") Long id);
 
+
     /**
      * 根据课程id集合查询课程简单信息
      * @param ids id集合
@@ -53,6 +56,7 @@ public interface CourseClient {
      */
     @GetMapping("/courses/simpleInfo/list")
     List<CourseSimpleInfoDTO> getSimpleInfoList(@RequestParam("ids") Iterable<Long> ids);
+
 
     /**
      * 根据课程id，获取课程、目录、教师信息
@@ -65,4 +69,5 @@ public interface CourseClient {
             @RequestParam(value = "withCatalogue", required = false) boolean withCatalogue,
             @RequestParam(value = "withTeachers", required = false) boolean withTeachers
     );
+
 }

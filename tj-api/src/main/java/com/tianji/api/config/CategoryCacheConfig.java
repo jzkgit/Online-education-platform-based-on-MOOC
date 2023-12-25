@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.util.Map;
 
 public class CategoryCacheConfig {
+
     /**
      * 课程分类的caffeine缓存
      */
@@ -22,6 +23,8 @@ public class CategoryCacheConfig {
                 .expireAfterWrite(Duration.ofMinutes(30)) // 有效期
                 .build();
     }
+
+
     /**
      * 课程分类的缓存工具类
      */
@@ -30,4 +33,5 @@ public class CategoryCacheConfig {
             Cache<String, Map<Long, CategoryBasicDTO>> categoryCaches, CategoryClient categoryClient){
         return new CategoryCache(categoryCaches, categoryClient);
     }
+
 }

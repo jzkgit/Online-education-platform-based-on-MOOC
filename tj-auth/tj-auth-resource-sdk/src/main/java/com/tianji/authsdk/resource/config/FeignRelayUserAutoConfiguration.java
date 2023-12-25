@@ -12,6 +12,8 @@ public class FeignRelayUserAutoConfiguration {
 
     @Bean
     public FeignRelayUserInterceptor feignRelayUserInterceptor(){
+
         return new FeignRelayUserInterceptor();
     }
+
 }

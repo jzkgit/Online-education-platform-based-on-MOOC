@@ -8,7 +8,9 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "tj.auth.resource")
 public class ResourceAuthProperties {
+
     private Boolean enable = false;
     private List<String> includeLoginPaths;
     private List<String> excludeLoginPaths;
+
 }
