@@ -31,7 +31,7 @@ tj:
     title: 基于慕课的在线教育平台 - 搜索系统接口文档
     description: 该服务包含课程搜索、兴趣推荐等相关功能
     contact-name: kkk
-    contact-url: https://blog.csdn.net/qq_66862911?type=blog
+    contact-url: https://github.com/jzkgit/Online-education-platform-based-on-MOOC/tree/lesson-init
     contact-email: https://blog.csdn.net/qq_66862911?type=blog
     version: v1.0
     enableResponseWrap: true

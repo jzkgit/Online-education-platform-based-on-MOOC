@@ -14,12 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * <p>
  * 购物车条目信息，也就是购物车中的课程 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-28
  */
 @RestController
 @RequestMapping("/carts")

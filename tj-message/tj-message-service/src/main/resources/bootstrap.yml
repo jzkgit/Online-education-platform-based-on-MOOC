@@ -29,11 +29,11 @@ tj:
     enable: true
     enableResponseWrap: true
     package-path: com.tianji.message.controller
-    title: 天机学堂 - 消息中心接口文档
+    title: 基于慕课 - 消息中心接口文档
     description: 该服务用于站内信、通知管理、短信发送等功能
-    contact-name: 传智教育·研究院
-    contact-url: http://www.itcast.cn/
-    contact-email: zhanghuyi@itcast.cn
+    contact-name: kkk
+    contact-url: https://github.com/jzkgit/Online-education-platform-based-on-MOOC/tree/lesson-init
+    contact-email: https://blog.csdn.net/qq_66862911?type=blog
     version: v1.0
   auth:
     resource:

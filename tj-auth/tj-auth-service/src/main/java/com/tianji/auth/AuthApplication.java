@@ -38,4 +38,5 @@ public class AuthApplication {
                 env.getActiveProfiles());
         log.info("--/\n------------------------------------------------------------------------------\n\t" );
     }
+
 }

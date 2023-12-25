@@ -17,12 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
  * 订单明细 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-29
  */
 
 @Api(tags = "订单明细相关接口")

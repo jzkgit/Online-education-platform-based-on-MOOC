@@ -41,12 +41,7 @@ import static com.tianji.trade.constants.OrderStatus.*;
 import static com.tianji.trade.constants.TradeErrorInfo.ORDER_NOT_EXISTS;
 
 /**
- * <p>
  * 订单明细 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-29
  */
 @Service
 @RequiredArgsConstructor
@@ -339,4 +334,5 @@ public class OrderDetailServiceImpl extends ServiceImpl<OrderDetailMapper, Order
 
         return new CoursePurchaseInfoDTO(enrollNum, refundNum, realPayAmount);
     }
+
 }

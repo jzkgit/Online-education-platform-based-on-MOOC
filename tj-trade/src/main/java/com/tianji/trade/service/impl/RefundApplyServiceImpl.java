@@ -50,12 +50,7 @@ import static com.tianji.trade.constants.RefundStatus.AGREE;
 import static com.tianji.trade.constants.RefundStatus.REJECT;
 
 /**
- * <p>
  * 退款申请 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-29
  */
 @Service
 @RequiredArgsConstructor

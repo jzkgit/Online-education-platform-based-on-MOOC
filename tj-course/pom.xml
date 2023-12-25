@@ -99,6 +99,7 @@
             <artifactId>xxl-job-core</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>

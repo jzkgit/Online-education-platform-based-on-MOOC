@@ -19,12 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * <p>
  * 订单 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-29
  */
 @Api(tags = "订单相关接口")
 @RestController
@@ -79,6 +74,8 @@ public class OrderController {
     @ApiOperation("删除订单接口")
     @DeleteMapping("/{id}")
     public void deleteOrder(@ApiParam("要删除的订单id") @PathVariable("id") Long id) {
+
         orderService.deleteOrder(id);
     }
+
 }

@@ -102,6 +102,7 @@ public class PayServiceImpl implements IPayService {
                 message, Duration.ofMillis(message.removeFirst()));
     }
 
+
     @Override
     public void queryPayResult(OrderDelayQueryDTO message) {
         // 1.获取订单信息
@@ -131,4 +132,5 @@ public class PayServiceImpl implements IPayService {
         // 3.2.支付成功
         orderService.handlePaySuccess(payResult);
     }
+
 }

@@ -45,12 +45,7 @@ import static com.tianji.trade.constants.TradeErrorInfo.ORDER_ALREADY_FINISH;
 import static com.tianji.trade.constants.TradeErrorInfo.ORDER_NOT_EXISTS;
 
 /**
- * <p>
  * 订单 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-29
  */
 @Service
 @RequiredArgsConstructor
@@ -281,7 +276,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             return;
         }
         // 3.判断订单所属用户与当前登录用户是否一致
-        if(userId != order.getUserId()){
+        /*
+            这里由于为Long类型，在 -128~127 之间若用 != 进行比较是可以的
+            反之，则不行，因为它们永远比较的是两个对象（即地址），结果则是 true
+         */
+        if(!userId.equals(order.getUserId())){
             // 不一致，说明不是当前用户的订单，结束
             throw new BadRequestException("不能删除他人订单");
         }
@@ -290,7 +289,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if (!success) {
             throw new DbException(OPERATE_FAILED);
         }
+
     }
+
 
     @Override
     public PageDTO<OrderPageVO> queryMyOrderPage(OrderPageQuery pageQuery) {

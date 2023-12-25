@@ -31,12 +31,7 @@ import java.util.stream.Collectors;
 import static com.tianji.trade.constants.TradeErrorInfo.*;
 
 /**
- * <p>
  * 购物车条目信息，也就是购物车中的课程 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-08-28
  */
 @Slf4j
 @Service
@@ -166,4 +161,5 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
             log.error("从购物车删除用户已购买的课程发生异常，用户id：{}，课程id：{}", userId, courseIds, e);
         }
     }
+
 }
