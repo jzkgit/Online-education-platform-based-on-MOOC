@@ -4,12 +4,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @ClassName Category3PO
- * @Author wusongsong
- * @Date 2022/10/13 15:32
- * @Version
- **/
 @Data
 public class Category3PO {
     private Long firstCateId;
@@ -27,4 +21,5 @@ public class Category3PO {
             categoryIdList.add(thirdCateId);
         }
     }
+
 }

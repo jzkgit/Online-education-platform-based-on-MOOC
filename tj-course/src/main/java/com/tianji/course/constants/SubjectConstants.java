@@ -3,11 +3,7 @@ package com.tianji.course.constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * @author wusongsong
- * @since 2022/7/17 13:07
- * @version 1.0.0
- **/
+
 public class SubjectConstants {
 
     @AllArgsConstructor

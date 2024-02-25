@@ -6,9 +6,6 @@ import lombok.Data;
 
 /**
  * 课程数据统计
- * @author wusongsong
- * @since 2022/7/10 15:36
- * @version 1.0.0
  **/
 @Data
 @ApiModel(description = "课程统计数据")

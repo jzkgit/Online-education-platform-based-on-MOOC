@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 今日数据
- * @ClassName TodayDataController
- * @Author wusongsong
- * @Date 2022/10/13 9:21
- * @Version
  **/
 @RestController
 @RequestMapping("/data/today")
@@ -27,12 +23,15 @@ public class TodayDataController {
     @GetMapping("")
     @ApiOperation("获取今日数据")
     public TodayDataVO get(){
+
         return todayDataService.get();
     }
+
 
     @PutMapping("set")
     @ApiOperation("设置线上数据")
     public void set(@RequestBody TodayDataDTO todayDataDTO) {
+
         todayDataService.set(todayDataDTO);
     }
 }

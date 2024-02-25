@@ -16,9 +16,6 @@ import java.util.List;
  * <p>
  * 用户兴趣表，保存感兴趣的二级分类id 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-07-21
  */
 @RestController
 @RequestMapping("/interests")
@@ -47,4 +44,5 @@ public class InterestsController {
     public List<CourseVO> queryCourseByCateId(@PathVariable("id") Long cateLv2Id){
         return searchService.queryCourseByCateId(cateLv2Id);
     }
+
 }

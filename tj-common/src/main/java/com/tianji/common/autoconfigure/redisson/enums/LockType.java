@@ -4,6 +4,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 
 public enum LockType {
+
     DEFAULT(){
         @Override
         public RLock getLock(RedissonClient redissonClient, String name) {
@@ -31,4 +32,5 @@ public enum LockType {
     ;
 
     public abstract RLock getLock(RedissonClient redissonClient, String name);
+
 }

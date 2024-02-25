@@ -6,10 +6,6 @@ import lombok.Data;
 
 /**
  * 课程相关老师信息
- * @ClassName CourseTeacherVO
- * @Author wusongsong
- * @Date 2022/7/11 18:17
- * @Version
  **/
 @Data
 @ApiModel("老师课程信息")

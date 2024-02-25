@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum PayType implements BaseEnum {
+
     JSAPI(1, "网页支付JS"),
     MINI_APP(2, "小程序支付"),
     APP(3, "APP支付"),
@@ -17,4 +18,5 @@ public enum PayType implements BaseEnum {
         this.value = value;
         this.desc = desc;
     }
+
 }

@@ -13,12 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
  * 权限表，包括菜单权限和访问路径权限
- * </p>
- *
- * @author 虎哥
- * @since 2022-07-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -94,6 +89,11 @@ public class Privilege implements Serializable {
     public Privilege() {
     }
 
+
+    /**
+     * 初始化传入的 DTO 类型
+     * @param dto
+     */
     public Privilege(PrivilegeDTO dto) {
         this.id = dto.getId();
         this.menuId = dto.getMenuId();
@@ -113,4 +113,5 @@ public class Privilege implements Serializable {
         dto.setInternal(internal);
         return dto;
     }
+
 }

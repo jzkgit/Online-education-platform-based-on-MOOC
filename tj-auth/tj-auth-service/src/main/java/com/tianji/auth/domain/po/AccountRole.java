@@ -10,12 +10,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * <p>
  * 账户、角色关联表
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

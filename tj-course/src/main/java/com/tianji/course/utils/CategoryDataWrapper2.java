@@ -6,12 +6,7 @@ import com.tianji.course.domain.vo.CategoryVO;
 
 import java.util.List;
 
-/**
- * @ClassName CategoryDataWrapper2
- * @Author wusongsong
- * @Date 2022/9/21 19:44
- * @Version
- **/
+
 public class CategoryDataWrapper2 implements TreeDataUtils.DataProcessor<CategoryVO, Category> {
     @Override
     public Object getParentKey(Category category) {
@@ -37,4 +32,5 @@ public class CategoryDataWrapper2 implements TreeDataUtils.DataProcessor<Categor
     public void setChild(CategoryVO parent, List<CategoryVO> child) {
         parent.setChildren(child);
     }
+
 }

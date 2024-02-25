@@ -18,4 +18,5 @@ public class AsyncSmsClient {
     public void sendMessage(SmsInfoDTO smsInfoDTO){
         mqHelper.send(MqConstants.Exchange.SMS_EXCHANGE, MqConstants.Key.SMS_MESSAGE, smsInfoDTO);
     }
+
 }

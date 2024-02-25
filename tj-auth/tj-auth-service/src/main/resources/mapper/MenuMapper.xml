@@ -12,12 +12,16 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
+
+
     <select id="listByRoles" resultType="com.tianji.auth.domain.po.Menu">
         SELECT m.id, parent_id, label, path, icon, priority
         FROM menu m
         INNER JOIN role_menu rm ON m.id = rm.menu_id
         WHERE rm.role_id
-        <foreach collection="roleIds" item="roleId" open="IN (" close=")" separator=",">#{roleId}</foreach>
+        <foreach collection="roleIds" item="roleId" open="IN (" close=")" separator=",">
+            #{roleId}
+        </foreach>
     </select>
 
 </mapper>

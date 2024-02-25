@@ -25,12 +25,7 @@ import static com.tianji.auth.common.constants.AuthErrorInfo.Msg.*;
 import static com.tianji.auth.constants.AuthConstants.ADMIN_ROLE_ID;
 
 /**
- * <p>
  * 权限表，包括菜单权限和访问路径权限 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-15
  */
 @Service
 @RequiredArgsConstructor
@@ -73,6 +68,7 @@ public class PrivilegeServiceImpl extends ServiceImpl<PrivilegeMapper, Privilege
         privilegeCache.cacheSinglePrivilege(p, CollUtils.singletonSet(ADMIN_ROLE_ID));
     }
 
+
     @Override
     @Transactional
     public void removePrivilegeById(Long id) {
@@ -83,6 +79,7 @@ public class PrivilegeServiceImpl extends ServiceImpl<PrivilegeMapper, Privilege
         // 删除缓存
         privilegeCache.removePrivilegeCacheById(id);
     }
+
 
     @Override
     public List<PrivilegeRoleDTO> listPrivilegeRoles() {
@@ -113,6 +110,7 @@ public class PrivilegeServiceImpl extends ServiceImpl<PrivilegeMapper, Privilege
         return list;
     }
 
+
     @Override
     public Set<Long> listPrivilegeByRoleId(Long roleId) {
         List<RolePrivilege> rolePrivileges = rolePrivilegeService.lambdaQuery()
@@ -123,6 +121,7 @@ public class PrivilegeServiceImpl extends ServiceImpl<PrivilegeMapper, Privilege
         }
         return rolePrivileges.stream().map(RolePrivilege::getPrivilegeId).collect(Collectors.toSet());
     }
+
 
     @Override
     @Transactional
@@ -148,6 +147,7 @@ public class PrivilegeServiceImpl extends ServiceImpl<PrivilegeMapper, Privilege
         privilegeCache.initPrivilegesCache(listPrivilegeRoles());
     }
 
+
     @Override
     @Transactional
     public void deleteRolePrivileges(Long roleId, List<Long> privilegeIds) {
@@ -156,4 +156,5 @@ public class PrivilegeServiceImpl extends ServiceImpl<PrivilegeMapper, Privilege
         // 2.移除对应角色权限缓存
         privilegeCache.initPrivilegesCache(listPrivilegeRoles());
     }
+
 }

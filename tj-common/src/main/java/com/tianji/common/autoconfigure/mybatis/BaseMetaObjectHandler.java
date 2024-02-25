@@ -10,6 +10,7 @@ import static com.tianji.common.constants.Constant.DATA_FIELD_NAME_UPDATER;
 
 
 /**
+ *
  * 操作数据库前自动填充需要更新的内容，只支持单个对象，不支持批量插入更新时的填充
  *
  **/

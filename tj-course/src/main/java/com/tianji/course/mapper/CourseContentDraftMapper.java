@@ -9,9 +9,6 @@ import org.apache.ibatis.annotations.Param;
  * <p>
  * 课程内容，主要是一些大文本 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-18
  */
 public interface CourseContentDraftMapper extends BaseMapper<CourseContentDraft> {
 

@@ -13,9 +13,6 @@ import javax.validation.constraints.Size;
 /**
  * 课程分类新增模型
  *
- * @author wusongsong
- * @since 2022/7/10 12:10
- * @version 1.0.0
  **/
 @Data
 @ApiModel(description = "课程分类新增模型")

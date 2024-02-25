@@ -12,9 +12,11 @@ import com.tianji.course.domain.po.CourseCataSubjectDraft;
  * @since 2022-09-21
  */
 public interface ICourseCataSubjectDraftService extends IService<CourseCataSubjectDraft> {
+
     /**
      * 删除不在的课程小节目录
      * @param courseId
      */
     void deleteNotInCataIdList(Long courseId);
+
 }

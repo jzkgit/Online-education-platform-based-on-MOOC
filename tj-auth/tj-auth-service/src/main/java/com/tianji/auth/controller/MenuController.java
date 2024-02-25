@@ -19,12 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 权限表，包括菜单权限和访问路径权限 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-16
  */
 @RestController
 @RequestMapping("/menus")
@@ -149,4 +144,5 @@ public class MenuController {
             @ApiParam(value = "菜单id集合") List<Long> menuIds){
         menuService.deleteRoleMenus(roleId, menuIds);
     }
+
 }

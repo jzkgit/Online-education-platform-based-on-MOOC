@@ -6,12 +6,6 @@ import com.tianji.course.domain.vo.SimpleCategoryVO;
 
 import java.util.List;
 
-/**
- * @ClassName CategoryDataWrapper
- * @Author wusongsong
- * @Date 2022/9/21 17:45
- * @Version
- **/
 public class CategoryDataWrapper implements TreeDataUtils.DataProcessor<SimpleCategoryVO, Category> {
 
     @Override
@@ -38,4 +32,5 @@ public class CategoryDataWrapper implements TreeDataUtils.DataProcessor<SimpleCa
     public void setChild(SimpleCategoryVO parent, List<SimpleCategoryVO> child) {
         parent.setChildren(child);
     }
+
 }

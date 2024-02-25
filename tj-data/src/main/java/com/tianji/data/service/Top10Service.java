@@ -4,10 +4,6 @@ package com.tianji.data.service;
 import com.tianji.data.model.dto.Top10DataSetDTO;
 import com.tianji.data.model.vo.Top10DataVO;
 
-/**
- * @author wusongsong
- * @since 2022/10/10 19:39
- **/
 public interface Top10Service {
 
     /**

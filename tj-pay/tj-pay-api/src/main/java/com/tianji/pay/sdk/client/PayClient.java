@@ -11,12 +11,14 @@ import java.util.List;
 
 @FeignClient("pay-service")
 public interface PayClient {
+
     /**
      * 查询支付渠道
      * @return 支付渠道列表
      */
     @GetMapping("/pay-channels/list")
     List<PayChannelDTO> listAllPayChannels();
+
     /**
      * 扫码支付申请支付单，返回支付url地址，用于生产二维码
      *
@@ -52,4 +54,5 @@ public interface PayClient {
      */
     @GetMapping("/refund-orders/{bizRefundOrderId}/status")
     RefundResultDTO queryRefundResult(@PathVariable("bizRefundOrderId") Long bizRefundOrderId);
+
 }

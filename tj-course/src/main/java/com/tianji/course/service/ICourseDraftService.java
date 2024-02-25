@@ -18,9 +18,6 @@ import java.util.Map;
  * <p>
  * 草稿课程 服务类
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-18
  */
 public interface ICourseDraftService extends IService<CourseDraft> {
 

@@ -20,9 +20,6 @@ import java.util.List;
  * <p>
  * 媒资表，主要是视频文件 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-06-30
  */
 @RestController
 @RequestMapping("/medias")

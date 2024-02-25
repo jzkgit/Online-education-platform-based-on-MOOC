@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-/**
- * @author 虎哥
- * @since 2022-06-16
- */
 @Api(tags = "角色管理")
 @RestController
 @RequestMapping("/roles")
@@ -96,4 +92,5 @@ public class RoleController {
     public void deleteRole(@ApiParam(value = "角色id", example = "1") @PathVariable("id") Long id) {
         roleService.deleteRole(id);
     }
+
 }

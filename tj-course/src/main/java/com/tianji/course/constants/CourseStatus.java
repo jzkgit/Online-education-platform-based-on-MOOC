@@ -3,12 +3,6 @@ package com.tianji.course.constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * @ClassName CourseStatus
- * @Author wusongsong
- * @Date 2022/7/18 16:07
- * @Version
- **/
 @Getter
 @AllArgsConstructor
 public enum CourseStatus {
@@ -29,6 +23,8 @@ public enum CourseStatus {
     }
 
     public boolean equals(Integer status){
+
         return this.status.intValue() == status;
     }
+
 }

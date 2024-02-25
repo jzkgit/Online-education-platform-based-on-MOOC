@@ -36,4 +36,5 @@ public class LoginRecordVO {
      * ip地址
      */
     private String ipv4;
+
 }

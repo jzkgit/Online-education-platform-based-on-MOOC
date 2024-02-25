@@ -21,6 +21,8 @@ public class SmsController {
     @ApiOperation("同步发送短信")
     @PostMapping("message")
     public void sendMessage(@RequestBody SmsInfoDTO smsInfoDTO){
+
         smsService.sendMessageAsync(smsInfoDTO);
     }
+
 }

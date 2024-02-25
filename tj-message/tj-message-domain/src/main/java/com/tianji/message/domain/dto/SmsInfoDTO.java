@@ -11,8 +11,11 @@ import java.util.Map;
 public class SmsInfoDTO {
     @ApiModelProperty("模板代号")
     private String templateCode;
+
     @ApiModelProperty("手机号码")
     private Iterable<String> phones;
+
     @ApiModelProperty("模板参数")
     private Map<String, String> templateParams;
+
 }

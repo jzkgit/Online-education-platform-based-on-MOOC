@@ -11,9 +11,6 @@ import java.util.List;
  * <p>
  * 课程老师关系表草稿 服务类
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-20
  */
 public interface ICourseTeacherDraftService extends IService<CourseTeacherDraft> {
 

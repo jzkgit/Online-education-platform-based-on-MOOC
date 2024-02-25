@@ -12,9 +12,6 @@ import java.util.List;
  * <p>
  * 课程分类关系表 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-15
  */
 public interface SubjectCategoryMapper extends BaseMapper<SubjectCategory> {
 
@@ -22,6 +19,7 @@ public interface SubjectCategoryMapper extends BaseMapper<SubjectCategory> {
             "value <foreach collection='scs' item='sc'  separator=','>(#{sc.subjectId},#{sc.firstCateId}," +
             "#{sc.secondCateId},#{sc.thirdCateId})</foreach></script>")
     int batchInsert(@Param("scs") List<SubjectCategory> subjectCategoryList);
+
 
     /**
      * 获取指定课程分类下所有课程的数量

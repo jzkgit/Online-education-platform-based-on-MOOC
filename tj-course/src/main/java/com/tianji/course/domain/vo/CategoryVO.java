@@ -7,11 +7,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * @author wusongsong
- * @since 2022/7/10 11:32
- * @version 1.0.0
- **/
 @ApiModel(description = "课程分类信息")
 @Data
 public class CategoryVO {

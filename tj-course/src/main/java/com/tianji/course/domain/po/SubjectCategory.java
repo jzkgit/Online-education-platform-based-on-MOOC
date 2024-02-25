@@ -13,9 +13,6 @@ import java.io.Serializable;
  * <p>
  * 课程分类关系表
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

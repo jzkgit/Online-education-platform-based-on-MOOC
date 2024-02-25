@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @ApiModel(description = "菜单表单实体")
 public class MenuDTO {
+
     @ApiModelProperty(value = "菜单id", example = "1")
     private Long id;
 
@@ -24,4 +25,5 @@ public class MenuDTO {
 
     @ApiModelProperty(value = "菜单顺序", example = "1")
     private Integer priority;
+
 }

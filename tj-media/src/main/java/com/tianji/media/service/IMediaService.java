@@ -13,9 +13,6 @@ import com.tianji.media.domain.vo.VideoPlayVO;
  * <p>
  * 媒资表，主要是视频文件 服务类
  * </p>
- *
- * @author 虎哥
- * @since 2022-06-30
  */
 public interface IMediaService extends IService<Media> {
 

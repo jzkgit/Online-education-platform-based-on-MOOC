@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
  * 草稿课程
  * </p>
  *
- * @author wusongsong
- * @since 2022-07-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

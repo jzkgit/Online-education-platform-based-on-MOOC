@@ -8,4 +8,5 @@ import org.springframework.context.annotation.Configuration;
 @EnableFeignClients(basePackages = "com.tianji.pay.sdk.client")
 public class PayApiImportConfiguration {
 
+
 }

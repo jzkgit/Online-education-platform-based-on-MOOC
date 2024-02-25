@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @ClassName BoardController
- * @Author wusongsong
- * @Date 2022/10/10 11:27
- * @Version
- **/
 @RestController
 @RequestMapping("/data/board")
 @Api(tags = "看板数据相关操作")
@@ -33,9 +27,11 @@ public class BoardController {
         return boardService.boardData(types);
     }
 
+
     @PutMapping("set")
     @ApiOperation("看板数据设置")
     public void setBoardData(@Validated @RequestBody BoardDataSetDTO boardDataSetDTO) {
         boardService.setBoardData(boardDataSetDTO);
     }
+
 }

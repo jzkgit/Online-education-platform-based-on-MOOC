@@ -18,6 +18,7 @@ public class AuthConfig {
     @Bean
     @ConfigurationProperties(prefix = "encrypt")
     public KeyProperties keyProperties(){
+
         return new KeyProperties();
     }
 
@@ -38,4 +39,5 @@ public class AuthConfig {
     public TomcatContextCustomizer cookieTomcatContextCustomizer(){
         return context -> context.setCookieProcessor(new LegacyCookieProcessor());
     }
+
 }

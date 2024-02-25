@@ -6,12 +6,7 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @ClassName CataVO
- * @Author wusongsong
- * @Date 2022/7/11 16:42
- * @Version
- **/
+
 @Data
 @ApiModel("课程目录")
 public class CataVO {

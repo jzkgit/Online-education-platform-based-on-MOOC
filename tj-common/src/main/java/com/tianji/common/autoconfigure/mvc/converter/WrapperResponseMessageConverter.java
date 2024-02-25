@@ -48,4 +48,5 @@ public class WrapperResponseMessageConverter implements HttpMessageConverter<Obj
     public void write(@NonNull Object o, MediaType contentType,@NonNull HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
         delegate.write(o, contentType, outputMessage);
     }
+
 }

@@ -10,9 +10,6 @@ import org.apache.ibatis.annotations.Param;
  * <p>
  * 课程老师关系表草稿 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-20
  */
 public interface CourseTeacherDraftMapper extends BaseMapper<CourseTeacherDraft> {
 

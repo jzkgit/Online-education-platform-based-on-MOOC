@@ -7,12 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * @ClassName NameExistVO
- * @Author wusongsong
- * @Date 2022/9/19 16:20
- * @Version
- **/
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

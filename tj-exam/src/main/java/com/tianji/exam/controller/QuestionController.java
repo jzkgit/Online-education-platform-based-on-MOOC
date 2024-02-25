@@ -22,9 +22,6 @@ import java.util.Map;
  * <p>
  * 题目 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-09-02
  */
 @Api(tags = "题目管理相关接口")
 @RequiredArgsConstructor
@@ -96,6 +93,8 @@ public class QuestionController {
     @ApiOperation("校验名称是否有效，存在则无效返回false，不存在返回true")
     @GetMapping("/checkName")
     public Boolean checkNameValid(@RequestParam("name") String name){
+
         return questionService.checkNameValid(name);
     }
+
 }

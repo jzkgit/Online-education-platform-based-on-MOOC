@@ -24,4 +24,5 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         // 3.登录则放行
         return true;
     }
+
 }

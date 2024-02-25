@@ -19,9 +19,6 @@ import java.util.stream.Stream;
  * <p>
  * 题目
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

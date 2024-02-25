@@ -12,12 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * <p>
  * 登录信息记录表
- * </p>
- *
- * @author 虎哥
- * @since 2022-07-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -14,9 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
  * <p>
  * 文件表，可以是普通文件、图片等 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-06-30
  */
 @RestController
 @RequestMapping("/files")
@@ -46,4 +43,5 @@ public class FileController {
             @ApiParam(value = "文件id", example = "1") @PathVariable("id") Long id) {
         fileService.removeById(id);
     }
+
 }

@@ -11,9 +11,6 @@ import java.util.List;
  * <p>
  * 课程题目关系列表 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-17
  */
 public interface CourseSubjectMapper extends BaseMapper<CourseSubject> {
 

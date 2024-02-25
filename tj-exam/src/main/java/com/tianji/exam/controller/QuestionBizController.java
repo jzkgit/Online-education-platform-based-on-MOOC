@@ -16,9 +16,6 @@ import java.util.Map;
  * <p>
  * 问题和业务关联表，例如把小节id和问题id关联，一个小节下可以有多个问题 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-09-02
  */
 @Api(tags = "题目管理相关接口")
 @RestController
@@ -51,4 +48,5 @@ public class QuestionBizController {
     public Map<Long, Integer> queryQuestionScoresByBizIds(@RequestParam("ids") List<Long> bizIds){
         return bizService.queryQuestionScoresByBizIds(bizIds);
     }
+
 }

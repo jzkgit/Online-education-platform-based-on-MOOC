@@ -14,11 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-/**
- * @author wusongsong
- * @since 2022/7/11 16:49
- * @version 1.0.0
- **/
+
 @Data
 @ApiModel(description = "章节")
 public class CataSaveDTO implements Checker {

@@ -9,6 +9,8 @@ public class ParamCheckerConfig {
 
     @Bean
     public CheckerAspect checkerAspect(){
+
         return new CheckerAspect();
     }
+
 }

@@ -35,8 +35,4 @@ public interface Constant {
     // 响应结果是否被R标记过
     String BODY_PROCESSED_MARK_HEADER = "IS_BODY_PROCESSED";
 
-
-
-
-
 }

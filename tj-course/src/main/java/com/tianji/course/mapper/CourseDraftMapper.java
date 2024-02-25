@@ -13,9 +13,6 @@ import java.util.List;
  * <p>
  * 草稿课程 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-21
  */
 public interface CourseDraftMapper extends BaseMapper<CourseDraft> {
     String COLUMNS = "id, name, course_type, cover_url, first_cate_id, second_cate_id, third_cate_id, free, price, template_type, template_url, status, purchase_start_time, purchase_end_time, step, media_duration,valid_duration, section_num, dep_id, create_time, update_time, creater, updater,score,publish_time";

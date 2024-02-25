@@ -7,11 +7,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * @author wusongsong
- * @since 2022/7/27 14:32
- * @version 1.0.0
- **/
 @Data
 public class CourseSimpleInfoDTO {
     @ApiModelProperty("课程id")
@@ -40,6 +35,8 @@ public class CourseSimpleInfoDTO {
     private Integer validDuration;
     @JsonIgnore
     public List<Long> getCategoryIds(){
+
         return List.of(firstCateId, secondCateId, thirdCateId);
     }
+
 }

@@ -6,11 +6,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author wusongsong
- * @since 2022/8/18 11:40
- * @version 1.0.0
- **/
 @Data
 @ApiModel(description = "题目简要信息")
 public class SubjectSimpleVO {

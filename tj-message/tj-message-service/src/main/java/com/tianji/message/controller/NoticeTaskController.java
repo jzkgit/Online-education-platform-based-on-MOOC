@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * 系统通告的任务表，可以延期或定期发送通告 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-08-19
  */
 @Api(tags = "短信任务管理接口")
 @RestController
@@ -54,4 +51,5 @@ public class NoticeTaskController {
     public NoticeTaskDTO queryNoticeTask(@ApiParam(value = "任务id", example = "1") @PathVariable("id") Long id){
         return noticeTaskService.queryNoticeTask(id);
     }
+
 }

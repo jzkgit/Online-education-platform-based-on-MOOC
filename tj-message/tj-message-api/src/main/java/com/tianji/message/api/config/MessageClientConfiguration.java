@@ -26,6 +26,8 @@ public class MessageClientConfiguration {
 
     @Bean
     public AsyncSmsClient smsClient(RabbitMqHelper mqHelper){
+
         return new AsyncSmsClient(mqHelper);
     }
+
 }

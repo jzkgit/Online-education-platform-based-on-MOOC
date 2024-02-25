@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * 学员详情表 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-07-12
  */
 @RestController
 @RequestMapping("/students")

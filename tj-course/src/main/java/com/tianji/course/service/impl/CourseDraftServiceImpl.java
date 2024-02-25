@@ -47,12 +47,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 草稿课程 服务实现类
- * </p>
- *
- * @author wusongsong
- * @since 2022-07-18
  */
 @Service
 public class CourseDraftServiceImpl extends ServiceImpl<CourseDraftMapper, CourseDraft> implements ICourseDraftService {

@@ -11,9 +11,6 @@ import java.time.LocalDateTime;
  * <p>
  * 目录草稿
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

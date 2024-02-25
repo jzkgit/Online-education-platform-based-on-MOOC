@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * 通知模板 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-08-19
  */
 @RestController
 @RequestMapping("/notice-templates")
@@ -54,4 +51,5 @@ public class NoticeTemplateController {
     public NoticeTemplateDTO queryNoticeTemplate(@ApiParam(value = "模板id", example = "1") @PathVariable("id") Long id){
         return noticeTemplateService.queryNoticeTemplate(id);
     }
+
 }

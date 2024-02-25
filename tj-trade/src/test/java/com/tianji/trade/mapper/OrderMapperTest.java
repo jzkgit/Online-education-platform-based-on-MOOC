@@ -16,4 +16,5 @@ class OrderMapperTest {
         Order order = orderMapper.getById(1L);
         System.out.println("order = " + order);
     }
+
 }

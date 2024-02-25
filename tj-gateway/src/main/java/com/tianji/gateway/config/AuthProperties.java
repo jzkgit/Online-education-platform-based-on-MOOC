@@ -23,4 +23,5 @@ public class AuthProperties implements InitializingBean {
         excludePath.add("/accounts/admin/login");
         excludePath.add("/accounts/refresh");
     }
+
 }

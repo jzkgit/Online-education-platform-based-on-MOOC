@@ -21,10 +21,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @ApiModel(description = "分页结果")
 public class PageDTO<T> {
+
     @ApiModelProperty("总条数")
     protected Long total;
+
     @ApiModelProperty("总页码数")
     protected Long pages;
+
     @ApiModelProperty("当前页数据")
     protected List<T> list;
 
@@ -69,6 +72,7 @@ public class PageDTO<T> {
     @ApiModelProperty(hidden = true)
     @JsonIgnore
     public boolean isEmpty(){
+
         return list == null || list.size() == 0;
     }
 

@@ -9,12 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
  * 课程内容，主要是一些大文本
- * </p>
- *
- * @author wusongsong
- * @since 2022-07-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

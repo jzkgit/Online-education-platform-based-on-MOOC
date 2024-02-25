@@ -5,12 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 
-/**
- * @ClassName SwaggerConfigProperties
- * @author wusongsong
- * @since 2022/6/27 13:47
- * @version 1.0.0
- **/
+
 @Data
 @ConfigurationProperties(prefix = "tj.swagger")
 public class SwaggerConfigProperties implements Serializable {
@@ -31,4 +26,5 @@ public class SwaggerConfigProperties implements Serializable {
     public String contactEmail;
 
     public String version;
+
 }

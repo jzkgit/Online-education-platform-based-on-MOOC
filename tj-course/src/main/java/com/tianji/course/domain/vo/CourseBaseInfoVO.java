@@ -6,11 +6,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * @author wusongsong
- * @since 2022/7/11 11:59
- * @version 1.0.0
- **/
 @Data
 @ApiModel(description = "课程基本信息")
 public class CourseBaseInfoVO {

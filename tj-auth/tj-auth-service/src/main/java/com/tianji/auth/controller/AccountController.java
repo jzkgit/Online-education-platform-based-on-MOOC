@@ -59,4 +59,5 @@ public class AccountController {
         }
         return accountService.refreshToken(WebUtils.cookieBuilder().decode(token));
     }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import java.time.Duration;
 
 public class RoleCacheConfig {
+
     /**
      * 角色的caffeine缓存
      */
@@ -28,4 +29,5 @@ public class RoleCacheConfig {
     public RoleCache roleCache(Cache<Long, RoleDTO> roleCaches, AuthClient authClient){
         return new RoleCache(roleCaches, authClient);
     }
+
 }

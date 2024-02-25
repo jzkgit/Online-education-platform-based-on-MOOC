@@ -15,4 +15,5 @@ public interface AuthClient {
 
     @GetMapping("/roles/list")
     List<RoleDTO> listAllRoles();
+
 }

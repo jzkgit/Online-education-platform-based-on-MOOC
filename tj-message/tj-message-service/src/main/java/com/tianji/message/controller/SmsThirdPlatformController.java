@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * 第三方云通讯平台 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-08-19
  */
 @Api(tags = "短信平台管理接口")
 @RestController

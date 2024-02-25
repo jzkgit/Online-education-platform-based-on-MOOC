@@ -6,9 +6,6 @@ import lombok.Data;
 
 /**
  * 三级分类
- * @author wusongsong
- * @since 2022/7/11 20:59
- * @version 1.0.0
  **/
 @Data
 @ApiModel(description = "分类")

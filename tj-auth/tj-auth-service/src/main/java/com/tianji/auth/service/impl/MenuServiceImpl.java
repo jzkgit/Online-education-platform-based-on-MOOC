@@ -27,12 +27,7 @@ import static com.tianji.auth.common.constants.AuthErrorInfo.Msg.MENU_NOT_FOUND;
 import static com.tianji.auth.common.constants.AuthErrorInfo.Msg.ROLE_NOT_FOUND;
 
 /**
- * <p>
  * 权限表，包括菜单权限和访问路径权限 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-16
  */
 @Service
 @RequiredArgsConstructor

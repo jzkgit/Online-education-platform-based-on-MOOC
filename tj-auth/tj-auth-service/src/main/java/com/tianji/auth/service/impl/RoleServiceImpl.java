@@ -14,12 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * <p>
  * 角色表 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-16
  */
 @Service
 @RequiredArgsConstructor
@@ -52,4 +47,5 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         // 3.清理缓存
         privilegeCache.removeCacheByRoleId(id);
     }
+
 }

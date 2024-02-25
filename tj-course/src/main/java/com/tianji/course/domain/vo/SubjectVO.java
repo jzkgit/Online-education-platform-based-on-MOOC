@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * 题目数据
- * @author wusongsong
- * @since 2022/7/11 20:24
- * @version 1.0.0
  **/
 @Data
 @ApiModel(description = "题目分页数据")

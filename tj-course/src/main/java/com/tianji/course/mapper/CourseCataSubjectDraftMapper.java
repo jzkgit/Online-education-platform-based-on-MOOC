@@ -8,12 +8,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 /**
- * <p>
  * 课程-题目关系表草稿 Mapper 接口
- * </p>
- *
- * @author wusongsong
- * @since 2022-07-20
  */
 public interface CourseCataSubjectDraftMapper extends BaseMapper<CourseCataSubjectDraft> {
 

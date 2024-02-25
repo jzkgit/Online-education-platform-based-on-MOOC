@@ -10,4 +10,5 @@
         WHERE order_detail_id = #{detailId}
         ORDER BY id DESC
     </select>
+
 </mapper>

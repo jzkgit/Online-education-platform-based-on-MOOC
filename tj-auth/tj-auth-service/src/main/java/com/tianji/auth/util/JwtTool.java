@@ -35,6 +35,7 @@ public class JwtTool {
         this.jwtSigner = JWTSignerUtil.createSigner("rs256", keyPair);
     }
 
+
     /**
      * 创建 access-token
      *
@@ -49,6 +50,7 @@ public class JwtTool {
                 .setSigner(jwtSigner)
                 .sign();
     }
+
 
     /**
      * 创建刷新token，并将token的JTI记录到Redis中
@@ -75,6 +77,7 @@ public class JwtTool {
                 .set(JwtConstants.JWT_REDIS_KEY_PREFIX + userDetail.getUserId(), jti, ttl);
         return token;
     }
+
 
     /**
      * 解析刷新token
@@ -129,10 +132,12 @@ public class JwtTool {
         return userDTO;
     }
 
+
     /**
      * 清理刷新refresh-token的jti，本质是refresh-token作废
      */
     public void cleanJtiCache() {
         stringRedisTemplate.delete(JwtConstants.JWT_REDIS_KEY_PREFIX + UserContext.getUser());
     }
+
 }

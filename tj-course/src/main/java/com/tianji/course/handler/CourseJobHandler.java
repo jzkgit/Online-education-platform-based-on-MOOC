@@ -6,12 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * @ClassName CourseJobHandler
- * @Author wusongsong
- * @Date 2022/9/16 15:04
- * @Version
- **/
 @Component
 @Slf4j
 public class CourseJobHandler {
@@ -21,6 +15,8 @@ public class CourseJobHandler {
 
     @XxlJob("courseFinished")
     public void courseFinished(){
+
         courseService.courseFinished();
     }
+
 }

@@ -5,11 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * @author wusongsong
- * @since 2022/7/10 15:06
- * @version 1.0.0
- **/
+
 @Data
 public class CategoryInfoVO {
     @ApiModelProperty("课程分类id")

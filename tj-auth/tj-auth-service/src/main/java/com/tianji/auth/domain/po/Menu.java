@@ -12,12 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
  * 权限表，包括菜单权限和访问路径权限
- * </p>
- *
- * @author 虎哥
- * @since 2022-07-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -116,4 +111,5 @@ public class Menu implements Serializable {
         dto.setPriority(priority);
         return dto;
     }
+
 }

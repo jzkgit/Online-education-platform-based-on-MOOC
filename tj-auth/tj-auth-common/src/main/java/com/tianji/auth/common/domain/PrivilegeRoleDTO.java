@@ -10,4 +10,5 @@ public class PrivilegeRoleDTO {
     private String antPath;
     private Boolean internal;
     private Set<Long> roles;
+
 }

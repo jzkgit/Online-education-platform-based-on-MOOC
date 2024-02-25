@@ -34,5 +34,6 @@ public class BaseSwaggerResponseModelPlugin implements OperationModelsProviderPl
         ResolvedType returnType = context.alternateFor(resolvedType);
         context.operationModelsBuilder().addReturn(returnType);
     }
+
 }
 

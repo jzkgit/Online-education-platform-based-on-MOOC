@@ -4,6 +4,7 @@ import com.tianji.common.autoconfigure.redisson.annotations.Lock;
 import org.redisson.api.RLock;
 
 public enum LockStrategy {
+
     /**
      * 不重试，直接结束，返回false
      */
@@ -61,4 +62,5 @@ public enum LockStrategy {
     ;
 
     public abstract boolean tryLock(RLock lock, Lock properties) throws InterruptedException;
+
 }

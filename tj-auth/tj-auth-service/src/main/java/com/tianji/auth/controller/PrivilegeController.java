@@ -22,12 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 权限表，包括菜单权限和访问路径权限 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-15
  */
 @RestController
 @RequestMapping("/privileges")
@@ -173,6 +168,7 @@ public class PrivilegeController {
             @ApiParam(value = "API权限的id集合") List<Long> privilegeIds) {
         privilegesService.bindRolePrivileges(roleId, privilegeIds);
     }
+
 
     /**
      * 解除角色的API权限

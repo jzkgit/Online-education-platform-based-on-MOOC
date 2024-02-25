@@ -6,12 +6,7 @@ import com.tianji.auth.domain.po.Role;
 import java.util.List;
 
 /**
- * <p>
  * 角色表 服务类
- * </p>
- *
- * @author 虎哥
- * @since 2022-06-16
  */
 public interface IRoleService extends IService<Role> {
 

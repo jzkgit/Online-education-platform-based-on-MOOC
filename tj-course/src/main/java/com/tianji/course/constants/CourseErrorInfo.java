@@ -1,10 +1,5 @@
 package com.tianji.course.constants;
 
-/**
- * @author wusongsong
- * @since 2022/7/14 13:46
- * @version 1.0.0
- **/
 public class CourseErrorInfo {
 
     //错误信息

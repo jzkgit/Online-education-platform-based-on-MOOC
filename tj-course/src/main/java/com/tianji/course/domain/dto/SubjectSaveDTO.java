@@ -17,9 +17,6 @@ import java.util.List;
 
 /**
  * 题目保存模型
- * @author wusongsong
- * @since 2022/7/11 21:10
- * @version 1.0.0
  **/
 @ApiModel("题目保存模型")
 @Data

@@ -9,12 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @ClassName Top10Controller
- * @Author wusongsong
- * @Date 2022/10/10 19:27
- * @Version
- **/
+
 @RestController
 @Api(tags = "工作台top10数据相关接口")
 @RequestMapping("/data/top10")

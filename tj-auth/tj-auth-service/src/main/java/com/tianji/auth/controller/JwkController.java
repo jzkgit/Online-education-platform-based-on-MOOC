@@ -27,4 +27,5 @@ public class JwkController {
         // 获取公钥并转码
         return Base64.encode(keyPair.getPublic().getEncoded());
     }
+
 }

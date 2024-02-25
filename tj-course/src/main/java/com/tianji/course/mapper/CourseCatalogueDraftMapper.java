@@ -10,9 +10,6 @@ import java.util.List;
  * <p>
  * 目录草稿 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-19
  */
 public interface CourseCatalogueDraftMapper extends BaseMapper<CourseCatalogueDraft> {
 
@@ -36,4 +33,5 @@ public interface CourseCatalogueDraftMapper extends BaseMapper<CourseCatalogueDr
 
     @Select("SELECT id FROM course_catalogue_draft WHERE course_id=#{courseId} AND type IN (2, 3)")
     List<Long> getSectionIdByCourseId(Long courseId);
+
 }

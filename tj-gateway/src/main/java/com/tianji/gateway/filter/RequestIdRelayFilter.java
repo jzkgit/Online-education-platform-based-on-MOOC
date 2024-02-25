@@ -17,6 +17,7 @@ import static com.tianji.common.constants.Constant.*;
 public class RequestIdRelayFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+
         // 1.生成 RequestId
         String requestId = UUID.randomUUID().toString(true);
         // 2.保存到日志变量池
@@ -38,6 +39,8 @@ public class RequestIdRelayFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
+
         return Ordered.HIGHEST_PRECEDENCE;
     }
+
 }

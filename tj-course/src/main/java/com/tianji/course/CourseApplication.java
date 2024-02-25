@@ -14,9 +14,6 @@ import java.net.UnknownHostException;
 
 /**
  * 课程微服务启动器
- * @author wusongsong
- * @since 2022/7/9 19:40
- * @version 1.0.0
  **/
 @SpringBootApplication
 @EnableScheduling
@@ -45,4 +42,5 @@ public class CourseApplication {
                 env.getProperty("server.port"),
                 env.getActiveProfiles());
     }
+
 }

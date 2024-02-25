@@ -13,9 +13,6 @@ import java.util.List;
  * <p>
  * 草稿课程 Mapper 接口
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-22
  */
 public interface CourseMapper extends BaseMapper<Course> {
     @Select("select count(1) from course where name = #{name}")

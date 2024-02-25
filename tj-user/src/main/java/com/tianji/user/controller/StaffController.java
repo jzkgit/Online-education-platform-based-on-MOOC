@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>
  * 员工详情表 前端控制器
  * </p>
- *
- * @author 虎哥
- * @since 2022-07-12
  */
 @RestController
 @RequestMapping("/staffs")
@@ -35,4 +32,5 @@ public class StaffController {
     public PageDTO<StaffVO> queryStaffPage(UserPageQuery pageQuery){
         return staffService.queryStaffPage(pageQuery);
     }
+
 }

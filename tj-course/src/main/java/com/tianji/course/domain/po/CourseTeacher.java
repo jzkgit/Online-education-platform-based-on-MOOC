@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
  * <p>
  * 课程老师关系表草稿
  * </p>
- *
- * @author wusongsong
- * @since 2022-07-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -19,4 +19,5 @@ public interface PayConstants {
         String REFUND_GET_NOFIGY_LOCK = "REFUND:GET_NOTIFY_ORDERS";
         String REFUND_QUERY_TASK = "PAY:QUERY_#{refundOrderId}";
     }
+
 }

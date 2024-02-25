@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 @ApiModel(description = "支付结果")
 @AllArgsConstructor
-public class PayResultDTO {
+public class
+PayResultDTO {
 
     public static final int PAYING = 1;
     public static final int FAILED = 2;
@@ -31,4 +32,5 @@ public class PayResultDTO {
     private final String payChannel;
     @ApiModelProperty("支付成功时间")
     private final LocalDateTime successTime;
+
 }

@@ -82,6 +82,7 @@ public class CommonExceptionAdvice {
         return processResponse(500, 500, "服务器内部异常");
     }
 
+
     private Object processResponse(int status, int code, String msg){
         // 1.标记响应异常已处理（避免重复处理）
         WebUtils.setResponseHeader(Constant.BODY_PROCESSED_MARK_HEADER, "true");
