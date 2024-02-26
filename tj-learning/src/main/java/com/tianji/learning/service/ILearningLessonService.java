@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.common.domain.query.PageQuery;
 import com.tianji.learning.domain.po.LearningLesson;
+import com.tianji.learning.domain.vo.LearningLessonVO;
 
 import java.util.List;
 
@@ -19,5 +20,12 @@ public interface ILearningLessonService extends IService<LearningLesson> {
      * @param courseIds
      */
     void addUserLesson(Long userId, List<Long> courseIds);
+
+
+    /**
+     * 课表分页查询
+     * @param pageQuery
+     */
+    PageDTO<LearningLessonVO> queryMyLesson(PageQuery pageQuery);
 
 }

@@ -63,6 +63,12 @@ public class AccountAuthFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange);
     }
 
+
+    /**
+     * 进行遍历，判断哪些请求需要放行
+     * @param antPath
+     * @return
+     */
     private boolean isExcludePath(String antPath) {
         for (String pathPattern : authProperties.getExcludePath()) {
             if(antPathMatcher.match(pathPattern, antPath)){

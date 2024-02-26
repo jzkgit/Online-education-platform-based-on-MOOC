@@ -16,10 +16,20 @@ import javax.validation.Valid;
 /**
  * 学生课程表 前端控制器
  */
+@Api(tags = "我的课表相关")
 @RestController
 @RequestMapping("/lessons")
+@RequiredArgsConstructor
 public class LearningLessonController {
 
+    final ILearningLessonService lessonService;
 
+    @ApiOperation(value = "课表分页查询")
+    @GetMapping("/page")
+    public PageDTO<LearningLessonVO> queryMyLesson(PageQuery pageQuery){
+
+        return lessonService.queryMyLesson(pageQuery);
+    }
+    
 
 }
