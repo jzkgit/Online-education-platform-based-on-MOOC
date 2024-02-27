@@ -21,7 +21,7 @@ public class UserInfoInterceptor implements HandlerInterceptor {
         String authorization = request.getHeader(JwtConstants.USER_HEADER);
         // 2.判断是否为空
         if (authorization == null) {
-            return true;
+            return true; //放行
         }
         // 3.转为用户id并保存
         try {

@@ -255,7 +255,7 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
         }
 
         //3.若有，则检查当前课程信息是否为有效状态
-        if(learningLesson.getExpireTime().isBefore(LocalDateTime.now())){
+        if(learningLesson.getExpireTime()!=null&&learningLesson.getExpireTime().isBefore(LocalDateTime.now())){
             throw new BizIllegalException("当前课程已过期，无法进行观看!");
         }
 
