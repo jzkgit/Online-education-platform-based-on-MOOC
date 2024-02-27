@@ -13,4 +13,5 @@ public interface IFileService extends IService<File> {
     FileDTO uploadFile(MultipartFile file);
 
     FileDTO getFileInfo(Long id);
+
 }

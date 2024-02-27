@@ -29,4 +29,5 @@ public interface IMediaService extends IService<Media> {
     VideoPlayVO getPlaySignatureByMediaId(Long mediaId);
 
     PageDTO<MediaVO> queryMediaPage(MediaQuery query);
+
 }

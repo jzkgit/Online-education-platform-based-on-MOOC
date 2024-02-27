@@ -3,6 +3,7 @@ package com.tianji.learning.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.api.client.course.CatalogueClient;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -121,7 +124,8 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
 
         //4. 将 DTO集合 封装为 map 类型
         Map<Long, CourseSimpleInfoDTO> courseSimpleInfoDTOMap = simpleInfoList.stream()
-                .collect(Collectors.toMap(CourseSimpleInfoDTO::getId,c->c));
+                //.collect(Collectors.toMap(CourseSimpleInfoDTO::getId, Function.identity())); //值对应的都是对象本身
+                .collect(Collectors.toMap(CourseSimpleInfoDTO::getId, c->c));
         //4.1 封装 VO 对象
         ArrayList<LearningLessonVO> learningLessonVOS = new ArrayList<>();
         for(LearningLesson lesson:records){
@@ -225,6 +229,62 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
         learningLessonVO.setLatestSectionName(cataSimpleInfoDTO.getName());
         learningLessonVO.setLatestSectionIndex(cataSimpleInfoDTO.getCIndex());
 
+        return learningLessonVO;
+    }
+
+
+    /**
+     * 检查课程是否有效
+     * @param courseId
+     * @return
+     */
+    @Override
+    public Long isLessonValid(Long courseId) {
+
+        //1.获取当前用户ID
+        Long userId = UserContext.getUser();
+
+        //2.检查是否存在当前课程信息
+        LearningLesson learningLesson = lessonService.lambdaQuery()
+                .eq(LearningLesson::getUserId, userId)
+                .eq(LearningLesson::getCourseId, courseId)
+                .one();
+
+        if(learningLesson==null){
+            return null;
+        }
+
+        //3.若有，则检查当前课程信息是否为有效状态
+        if(learningLesson.getExpireTime().isBefore(LocalDateTime.now())){
+            throw new BizIllegalException("当前课程已过期，无法进行观看!");
+        }
+
+        return learningLesson.getId();
+    }
+
+
+    /**
+     * 查询用户课表中指定课程状态
+     * @param courseId
+     * @return
+     */
+    @Override
+    public LearningLessonVO queryLessonByCourseId(Long courseId) {
+
+        //1.获取当前用户ID
+        Long userId = UserContext.getUser();
+
+        //2.查询当前用户是否有该课程
+        LearningLesson learningLesson = lessonService.lambdaQuery()
+                .eq(LearningLesson::getUserId, userId)
+                .eq(LearningLesson::getCourseId, courseId)
+                .one();
+        if(learningLesson==null){
+            return null;
+        }
+
+        //3.若有，则封装当前课程的状态信息并返回
+        LearningLessonVO learningLessonVO = BeanUtils.copyProperties(learningLesson, LearningLessonVO.class);
         return learningLessonVO;
     }
 

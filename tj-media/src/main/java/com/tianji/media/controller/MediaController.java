@@ -74,4 +74,5 @@ public class MediaController {
             @ApiParam(value = "媒资id集合，例如1,2,3", required = true) @RequestParam("ids") List<Long> mediaIds){
         mediaService.removeByIds(mediaIds);
     }
+
 }
