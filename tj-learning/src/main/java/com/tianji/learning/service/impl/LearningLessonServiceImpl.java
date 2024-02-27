@@ -10,6 +10,7 @@ import com.tianji.api.client.course.CourseClient;
 import com.tianji.api.dto.IdAndNumDTO;
 import com.tianji.api.dto.course.CataSimpleInfoDTO;
 import com.tianji.api.dto.course.CourseFullInfoDTO;
+import com.tianji.api.dto.course.CourseSearchDTO;
 import com.tianji.api.dto.course.CourseSimpleInfoDTO;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.common.domain.query.PageQuery;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,8 +49,9 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
 
     final CourseClient courseClient; //课程服务 远程调用
 
-    final LearningLessonServiceImpl lessonService; //this
+    final CatalogueClient catalogueClient; //媒资服务【远程】
 
+    final LearningLessonServiceImpl lessonService; //this
 
     /**
      * 保存课程到课表
@@ -83,7 +86,7 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
 
 
     /**
-     * 查询我的课表
+     * 分页查询我的课表
      * @param pageQuery
      */
     @Override
@@ -136,6 +139,93 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
         }
 
         return PageDTO.of(page,learningLessonVOS);
+    }
+
+
+    @Resource
+    private LearningLessonMapper learningLessonMapper;
+
+    /**
+     * 查询正在学习的课程信息
+     */
+    @Override
+    public LearningLessonVO queryMyCurrentLesson() {
+
+        //1.获取当前登录用户的ID
+        Long userId = UserContext.getUser();
+        if(userId==null){
+            throw new BadRequestException("请先进行登录!");
+        }
+
+        //2.查询当前用户最近学习的课程信息
+        //        LambdaQueryWrapper<LearningLesson> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(LearningLesson::getUserId, userId)
+//                .eq(LearningLesson::getStatus, LessonStatus.LEARNING)
+//                .orderByDesc(LearningLesson::getLatestLearnTime)
+//                .last("limit 0,1");
+//
+//        LearningLesson lesson = learningLessonMapper.selectOne(queryWrapper);
+        LearningLesson latestLessonInfo = lessonService.lambdaQuery()
+                .eq(LearningLesson::getUserId, userId)
+                .eq(LearningLesson::getStatus, LessonStatus.LEARNING)
+                .orderByDesc(LearningLesson::getLatestLearnTime) //最近学习课程的时间
+                .last("limit 0,1") //取第一条
+                .one();
+
+        //2.1 判断是否为空
+        if(BeanUtils.isEmpty(latestLessonInfo)){
+            return null;
+        }
+
+//----------------------------------------------------------------------------------------------------------------------
+        //3.远程调用课程服务，给 vo 课程名、章节数、封面赋值
+//        LearningLessonVO learningLessonVO = new LearningLessonVO();
+//        CourseSearchDTO courseSearchDTO = courseClient.getSearchInfo(latestLessonInfo.getCourseId());
+//        if(courseSearchDTO==null){
+//            return  null;
+//        }
+//        learningLessonVO.setCourseName(courseSearchDTO.getName());
+//        learningLessonVO.setSections(courseSearchDTO.getSections());
+//        learningLessonVO.setCourseCoverUrl(courseSearchDTO.getCoverUrl());
+//
+        //4.查询总课程数
+//        LambdaQueryWrapper<LearningLesson> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(LearningLesson::getUserId,userId);
+//        Integer lessonCount = learningLessonMapper.selectCount(queryWrapper);
+//        learningLessonVO.setCourseAmount(lessonCount);
+//----------------------------------------------------------------------------------------------------------------------
+
+        //3.远程调用课程服务，给 vo 课程名、章节数、封面赋值
+        CourseFullInfoDTO fullInfoDTO = courseClient
+                .getCourseInfoById(latestLessonInfo.getCourseId(), false, false);
+        if(fullInfoDTO==null){
+            throw new BizIllegalException("课程不存在!");
+        }
+
+        //4.查询总课程数
+        Integer count = lessonService.lambdaQuery()
+                .eq(LearningLesson::getUserId, userId).count();
+
+        //5.远程调用课程服务，获取小节名称与小节编号
+        Long latestSectionId = latestLessonInfo.getLatestSectionId();
+        List<CataSimpleInfoDTO> cataSimpleInfoDTOS = catalogueClient
+                //由于只有一个课程信息以及ID，而远程调用方法中需要传入集合，所以这里使用 singleList 集合传入单个元素，节省空间使用
+                .batchQueryCatalogue(CollUtils.singletonList(latestSectionId));//根据目录id列表查询目录信息
+        if(CollUtils.isEmpty(cataSimpleInfoDTOS)){
+            throw new BizIllegalException("当前小节不存在!");
+        }
+
+        //6.封装 VO 对象返回
+        LearningLessonVO learningLessonVO = BeanUtils.copyProperties(latestLessonInfo, LearningLessonVO.class);
+        learningLessonVO.setCourseName(fullInfoDTO.getName());
+        learningLessonVO.setCourseCoverUrl(fullInfoDTO.getCoverUrl());
+        learningLessonVO.setSections(fullInfoDTO.getSectionNum());
+        learningLessonVO.setCourseAmount(count);
+        CataSimpleInfoDTO cataSimpleInfoDTO = cataSimpleInfoDTOS.get(0);
+        learningLessonVO.setLatestSectionName(cataSimpleInfoDTO.getName());
+        learningLessonVO.setLatestSectionIndex(cataSimpleInfoDTO.getCIndex());
+
+        return learningLessonVO;
     }
 
 

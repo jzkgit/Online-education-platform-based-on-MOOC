@@ -23,9 +23,16 @@ public interface ILearningLessonService extends IService<LearningLesson> {
 
 
     /**
-     * 课表分页查询
+     * 分页查询我的课表
      * @param pageQuery
      */
     PageDTO<LearningLessonVO> queryMyLesson(PageQuery pageQuery);
+
+
+    /**
+     * 查询正在学习的课程
+     */
+    LearningLessonVO queryMyCurrentLesson();
+
 
 }
