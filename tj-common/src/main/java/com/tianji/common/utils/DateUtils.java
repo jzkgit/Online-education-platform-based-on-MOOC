@@ -8,10 +8,6 @@ import java.util.*;
 
 /**
  * 时间工具类,用于本地时间操作,包含LocalDateTimeUtil的所有方法和自定义的LocalDateTime的操作方法及常量
- *
- * @author wusongsong
- * @version 1.0.0 1.0
- * @see 1.0
  * @since 从哪个版本开始支持该类的功能
  */
 public class DateUtils extends LocalDateTimeUtil {

@@ -3,13 +3,16 @@ package com.tianji.learning.controller;
 
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.common.domain.query.PageQuery;
+import com.tianji.learning.domain.dto.LearningPlanDTO;
 import com.tianji.learning.domain.po.LearningLesson;
 import com.tianji.learning.domain.vo.LearningLessonVO;
+import com.tianji.learning.domain.vo.LearningPlanPageVO;
 import com.tianji.learning.service.ILearningLessonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,6 +57,30 @@ public class LearningLessonController {
     public LearningLessonVO queryLessonByCourseId(@PathVariable("courseId")Long courseId){
 
         return lessonService.queryLessonByCourseId(courseId);
+    }
+
+
+    @ApiOperation("创建学习计划")
+    @PostMapping("/plans")
+    public void createLessonPlans(@RequestBody @Validated LearningPlanDTO learningPlanDTO){
+
+        lessonService.createLessonPlans(learningPlanDTO);
+    }
+
+
+    @ApiOperation("查询学习计划")
+    @GetMapping("/plans")
+    public LearningPlanPageVO queryMyLessonPlans(PageQuery pageQuery){
+
+        return lessonService.queryMyLessonPlans(pageQuery);
+    }
+
+
+    @ApiOperation("统计课程学习人数")
+    @GetMapping("/{courseId}/count")
+    public Integer countLearningLessonByCourse(@PathVariable("courseId") Long courseId){
+
+        return lessonService.countLearningLessonByCourse(courseId);
     }
 
 
