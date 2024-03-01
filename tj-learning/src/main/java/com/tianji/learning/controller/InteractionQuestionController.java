@@ -1,0 +1,42 @@
+package com.tianji.learning.controller;
+
+
+import com.tianji.common.domain.dto.PageDTO;
+import com.tianji.learning.domain.dto.QuestionFormDTO;
+import com.tianji.learning.service.impl.InteractionQuestionServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+/**
+ * 互动提问的问题表 前端控制器
+ */
+@RestController
+@RequestMapping("/questions")
+@Api(tags = "互动问答的相关接口")
+@RequiredArgsConstructor
+public class InteractionQuestionController {
+
+    final InteractionQuestionServiceImpl questionService;
+
+    @ApiOperation("新增互动问题服务")
+    @PostMapping
+    public void savaQuestions(@RequestBody @Validated QuestionFormDTO formDTO){
+
+        questionService.savaQuestions(formDTO);
+    }
+
+
+    @ApiOperation("修改互动问题服务")
+    @PutMapping("/{id}")
+    public void updateQuestionsById(@RequestBody QuestionFormDTO formDTO,@PathVariable("id") Long id){
+
+        questionService.updateQuestionsById(formDTO,id);
+    }
+
+}

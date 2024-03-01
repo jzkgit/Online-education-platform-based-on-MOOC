@@ -356,7 +356,7 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
 //            throw new DbException("当前用户没有设定本周的学习计划!");
 //        }
 
-        //2.3 以值取键，得到本周所有小节的总频率
+        //2.3 以键取值，得到本周所有小节的总频率
         Integer plansTotal = 0;
         if(lessonServiceMap!=null&&lessonServiceMap.get("plansTotal")!=null) {
             plansTotal = Integer.valueOf(lessonServiceMap.get("plansTotal").toString());
@@ -417,7 +417,6 @@ public class LearningLessonServiceImpl extends ServiceImpl<LearningLessonMapper,
         //5.1 将 list 集转换为 map 集合，以便于在另一个 list 中进行传值
         Map<Long, LearningRecord> recordMap = learningRecords.stream()
                 .collect(Collectors.toMap(LearningRecord::getLessonId, r -> r));
-
 
         //封装 VO 返回
         LearningPlanPageVO learningPlanPageVO = new LearningPlanPageVO();

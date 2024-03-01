@@ -20,6 +20,7 @@ import com.tianji.learning.enums.SectionType;
 import com.tianji.learning.mapper.LearningRecordMapper;
 import com.tianji.learning.service.ILearningLessonService;
 import com.tianji.learning.service.ILearningRecordService;
+import com.tianji.learning.utils.LearningRecordDelayTaskHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,8 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
 
     final CourseClient courseClient; //远程调用课程服务
 
+    final LearningRecordDelayTaskHandler delayTaskHandler; //延迟队列
+
 
     /**
      * 查询当前用户指定课程的学习进度
@@ -62,7 +65,7 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
             throw new BizIllegalException("该课程未加入课表!");
         }
 
-        //3. 结合 userId、lessonId 查询学习记录
+        //3. 结合 lessonId 查询学习记录
         List<LearningRecord> learningRecords = learningRecordService.lambdaQuery()
                 .eq(LearningRecord::getLessonId, learningLesson.getId())
                 .list();
@@ -94,11 +97,11 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
         //2.处理学习记录
         boolean isFinished = false; //代表本小节是否已经学完
         if(recordFormDTO.getSectionType().equals(SectionType.EXAM.getValue())){
-            //2.1 提交考试记录
+            //2.1 提交【考试】记录
             isFinished = handleExamRecord(userId,recordFormDTO);
 
         }else {
-            //2.2 提交视频播放记录
+            //2.2 提交【视频】播放记录
             isFinished = handleVedioRecord(userId,recordFormDTO);
 
         }
@@ -165,11 +168,13 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
     private boolean handleVedioRecord(Long userId, LearningRecordFormDTO recordFormDTO) {
 
         //1.查询旧的学习记录
-        LearningRecord learningRecord = learningRecordService.lambdaQuery()
-                .eq(LearningRecord::getUserId, userId)
-                .eq(LearningRecord::getLessonId, recordFormDTO.getLessonId())
-                .eq(LearningRecord::getSectionId,recordFormDTO.getSectionId())
-                .one();
+        LearningRecord learningRecord = queryOldRecord(recordFormDTO.getLessonId(),recordFormDTO.getSectionId());
+
+//        LearningRecord learningRecord = learningRecordService.lambdaQuery()
+//                .eq(LearningRecord::getUserId, userId)
+//                .eq(LearningRecord::getLessonId, recordFormDTO.getLessonId())
+//                .eq(LearningRecord::getSectionId,recordFormDTO.getSectionId())
+//                .one();
 
         //1.1判断该学习记录是否存在
         if(learningRecord==null){
@@ -186,18 +191,67 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
         //2.2判断当前是否为【第一次】学完本次课程（要求：旧状态为未完成，且本次播放量超过50%）
         boolean isFinished = !learningRecord.getFinished() && recordFormDTO.getDuration() / recordFormDTO.getMoment() < 2;
 
+        //2.3不是第一次学完
+        if(!isFinished){
+
+            //3.先将课程信息缓存到 redis 中
+            LearningRecord record = new LearningRecord()
+                    .setId(learningRecord.getId())
+                    .setSectionId(recordFormDTO.getSectionId())
+                    .setLessonId(recordFormDTO.getLessonId())
+                    .setMoment(recordFormDTO.getMoment()) //【着重处理点】
+                    .setFinished(false);
+            delayTaskHandler.addLearningRecordTask(record); //内部已经提交延迟任务到延迟队列 DelayQueue
+            return false;
+        }
+
         LambdaUpdateChainWrapper<LearningRecord> set = learningRecordService.lambdaUpdate()
                 .set(LearningRecord::getMoment, recordFormDTO.getMoment())
-                .set(LearningRecord::getFinished, isFinished)
+                .set(LearningRecord::getFinished, true)
                 //若为第一次学完，则进行更新该课程的学习完成记录的时间
-                .set(isFinished,LearningRecord::getFinishTime, recordFormDTO.getCommitTime())
+                .set(LearningRecord::getFinishTime, recordFormDTO.getCommitTime())
                 .eq(LearningRecord::getId,learningRecord.getId());
         boolean update = learningRecordService.update(set);
         if(!update){
             throw new DbException("学习记录更新失败!");
         }
 
-        return isFinished;
+        //5.为了保持缓存与数据库【数据的一致性】，清除 redis 中缓存，之后让 DB 重新将记录加入 redis 中
+        delayTaskHandler.cleanRecordCache(learningRecord.getLessonId(),learningRecord.getSectionId());
+
+        return true;
+    }
+
+
+    /**
+     * 从缓存中查询对应的学习记录（之前的旧记录）
+     */
+    private LearningRecord queryOldRecord(Long lessonId, Long sectionId) {
+
+        //1.先进行查询缓存
+        LearningRecord learningRecord = delayTaskHandler.readRecordCache(lessonId, sectionId);
+
+        //1.1若命中，则直接返回
+        if(learningRecord!=null){
+            return learningRecord;
+        }
+
+        //2.若缓存没有，则查询 DB
+        learningRecord = learningRecordService.lambdaQuery()
+        .eq(LearningRecord::getUserId, UserContext.getUser())
+        .eq(LearningRecord::getLessonId, lessonId)
+        .eq(LearningRecord::getSectionId,sectionId)
+        .one();
+
+        //2.1 若 DB 中存在，则放入缓存中
+        if(learningRecord!=null){
+            delayTaskHandler.writeRecordCache(learningRecord);
+        }else {
+            //2.2 若都不存在，则返回 null
+            return null;
+        }
+
+        return learningRecord;
     }
 
 
