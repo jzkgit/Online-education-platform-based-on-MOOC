@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @ApiModel(description = "用户详情")
-public class UserDTO {
+public class  UserDTO {
     @ApiModelProperty(value = "用户id", example = "1")
     private Long id;
     @ApiModelProperty(value = "手机", example = "13890011009")
