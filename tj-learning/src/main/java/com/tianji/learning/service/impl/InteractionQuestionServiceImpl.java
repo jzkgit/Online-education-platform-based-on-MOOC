@@ -31,6 +31,7 @@ import com.tianji.learning.domain.query.QuestionPageQuery;
 import com.tianji.learning.domain.vo.QuestionVO;
 import com.tianji.learning.enums.QuestionStatus;
 import com.tianji.learning.mapper.InteractionQuestionMapper;
+import com.tianji.learning.mapper.InteractionReplyMapper;
 import com.tianji.learning.service.IInteractionQuestionService;
 import com.tianji.learning.service.IInteractionReplyService;
 import lombok.RequiredArgsConstructor;
@@ -54,11 +55,14 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
 
     final InteractionQuestionServiceImpl questionService;
 
+    final InteractionReplyServiceImpl replyService;
+
     final InteractionQuestionMapper questionMapper;
+
+    final InteractionReplyMapper replyMapper;
 
     final UserClient userClient;
 
-    final InteractionReplyServiceImpl replyService;
 
 
     /**
@@ -283,6 +287,53 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
         }
 
         return questionVO;
+    }
+
+
+
+    /**
+     * 删除我的问题
+     * @param id
+     */
+    @Override
+    public void deleteMyQuestion(Long id) {
+
+        //1.查询当前问题是否存在
+        InteractionQuestion question = questionService.lambdaQuery()
+                .eq(id != null, InteractionQuestion::getId, id)
+                .one();
+        if(question==null){
+            throw new BadRequestException("当前问题不存在!");
+        }
+
+
+        //2.查询当前问题是否为自己提问
+        //2.1 获取当前用户的ID
+        Long userId = UserContext.getUser();
+        if(!question.getUserId().equals(userId)){
+            throw new BadRequestException("当前问题不是自己提问的问题，删除失败!");
+        }
+
+
+        //3.删除该问题，以及问题下的所有评论以及回答
+        int delete = questionMapper.deleteById(id);
+        if(delete==0){
+            throw new DbException("删除失败!");
+        }
+        //3.1 查询当前问题下的评论以及回答信息
+        List<InteractionReply> interactionReplies = replyService.lambdaQuery()
+                .eq(InteractionReply::getQuestionId, id)
+                .list();
+
+        if(interactionReplies!=null) {
+            ArrayList<Long> replyIds = new ArrayList<>();
+            interactionReplies.forEach(interactionReply -> replyIds.add(interactionReply.getId()));
+            int deleteBatchIds = replyMapper.deleteBatchIds(replyIds);
+            if(deleteBatchIds==0){
+                throw new DbException("删除回答以及评论失败!");
+            }
+        }
+
     }
 
 

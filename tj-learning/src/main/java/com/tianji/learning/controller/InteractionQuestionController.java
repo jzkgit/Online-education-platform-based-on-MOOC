@@ -58,4 +58,13 @@ public class InteractionQuestionController {
         return questionService.queryQuestionInfoById(id);
     }
 
+
+    @ApiOperation("删除我的问题")
+    @DeleteMapping("/{id}")
+    public void deleteMyQuestion(@PathVariable("id")Long id){
+
+        questionService.deleteMyQuestion(id);
+    }
+
+
 }
