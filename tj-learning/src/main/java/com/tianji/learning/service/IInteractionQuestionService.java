@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.learning.domain.dto.QuestionFormDTO;
 import com.tianji.learning.domain.po.InteractionQuestion;
+import com.tianji.learning.domain.query.QuestionAdminPageQuery;
 import com.tianji.learning.domain.query.QuestionPageQuery;
+import com.tianji.learning.domain.vo.QuestionAdminVO;
 import com.tianji.learning.domain.vo.QuestionVO;
 
 /**
@@ -45,5 +47,12 @@ public interface IInteractionQuestionService extends IService<InteractionQuestio
      * 删除我的问题
      */
     void deleteMyQuestion(Long id);
+
+
+    /**
+     * 分页查询问题列表————管理端
+     * @param adminPageQuery
+     */
+    PageDTO<QuestionAdminVO> queryQuestionsByPage(QuestionAdminPageQuery adminPageQuery);
 
 }

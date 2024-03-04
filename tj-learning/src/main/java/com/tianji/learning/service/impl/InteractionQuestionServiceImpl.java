@@ -27,7 +27,9 @@ import com.tianji.common.utils.UserContext;
 import com.tianji.learning.domain.dto.QuestionFormDTO;
 import com.tianji.learning.domain.po.InteractionQuestion;
 import com.tianji.learning.domain.po.InteractionReply;
+import com.tianji.learning.domain.query.QuestionAdminPageQuery;
 import com.tianji.learning.domain.query.QuestionPageQuery;
+import com.tianji.learning.domain.vo.QuestionAdminVO;
 import com.tianji.learning.domain.vo.QuestionVO;
 import com.tianji.learning.enums.QuestionStatus;
 import com.tianji.learning.mapper.InteractionQuestionMapper;
@@ -63,6 +65,13 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
 
     final UserClient userClient;
 
+    final SearchClient searchClient;
+
+    final CourseClient courseClient;
+
+    final CatalogueClient catalogueClient; //目录服务
+
+    final CategoryCache categoryCache; //分类缓存
 
 
     /**
@@ -290,7 +299,6 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
     }
 
 
-
     /**
      * 删除我的问题
      * @param id
@@ -334,6 +342,108 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
             }
         }
 
+    }
+
+
+    /**
+     * 分页查询问题列表————管理端
+     * @param adminPageQuery
+     */
+    @Override
+    public PageDTO<QuestionAdminVO> queryQuestionsByPage(QuestionAdminPageQuery adminPageQuery) {
+
+        //0.结合 ES 索引库，根据课程名称获取课程ID
+        List<Long> courseIds=null;
+        if(adminPageQuery.getCourseName()!=null) {
+            courseIds = searchClient.queryCoursesIdByName(adminPageQuery.getCourseName());
+            //若搜索为空，则返回空值
+            if(CollUtils.isEmpty(courseIds)){
+                return PageDTO.empty(0L,0L);
+            }
+        }
+
+        //1.查询对应页问题的信息
+        Page<InteractionQuestion> questionPage = questionService.lambdaQuery()
+                .in(courseIds != null, InteractionQuestion::getCourseId, courseIds)
+                .eq(adminPageQuery.getStatus() != null, InteractionQuestion::getStatus, adminPageQuery.getStatus())
+                .between(adminPageQuery.getBeginTime() != null && adminPageQuery.getEndTime() != null,
+                        InteractionQuestion::getCreateTime, adminPageQuery.getBeginTime(), adminPageQuery.getEndTime())
+                .page(adminPageQuery.toMpPage("create_time", false));
+
+        List<InteractionQuestion> interactionQuestionList = questionPage.getRecords();
+        if(CollUtils.isEmpty(interactionQuestionList)){
+            return PageDTO.empty(0L,0L);
+        }
+
+
+        //1.1 获取对应的ID 集合
+        ArrayList<Long> userIds = new ArrayList<>(); //用户ID集合
+        ArrayList<Long> cIds = new ArrayList<>(); //课程ID集合
+        ArrayList<Long>  chapterAndSectionIds = new ArrayList<>();  //课程章与节的ID集合
+        interactionQuestionList.forEach(new Consumer<InteractionQuestion>() {
+                    @Override
+                    public void accept(InteractionQuestion interactionQuestion) {
+                        userIds.add(interactionQuestion.getUserId());
+                        cIds.add(interactionQuestion.getCourseId());
+                        chapterAndSectionIds.add(interactionQuestion.getChapterId());
+                        chapterAndSectionIds.add(interactionQuestion.getSectionId());
+                    }
+                });
+
+        //2.远程调用用户服务，查询用户信息
+        List<UserDTO> userDTOS = userClient.queryUserByIds(userIds);
+        if(CollUtils.isEmpty(userDTOS)){
+            throw new DbException("用户信息为空!");
+        }
+        Map<Long, UserDTO> userDTOMap = userDTOS.stream()
+                .collect(Collectors.toMap(UserDTO::getId, u -> u));
+
+        //3.远程调用课程服务，查询课程信息
+        List<CourseSimpleInfoDTO> courseList = courseClient.getSimpleInfoList(cIds);
+        if(CollUtils.isEmpty(courseList)){
+            throw new DbException("课程信息为空!");
+        }
+        Map<Long, CourseSimpleInfoDTO> courseDTOMap = courseList.stream()
+                .collect(Collectors.toMap(CourseSimpleInfoDTO::getId, c -> c));
+
+        //4.远程调用课程服务，查询章节信息
+        List<CataSimpleInfoDTO> cataSimpleInfoDTOS = catalogueClient.batchQueryCatalogue(chapterAndSectionIds);
+        if(CollUtils.isEmpty(cataSimpleInfoDTOS)){
+            throw new BadRequestException("章节信息为空!");
+        }
+        Map<Long, String> cateLogueMap = cataSimpleInfoDTOS.stream()
+                .collect(Collectors.toMap(CataSimpleInfoDTO::getId, CataSimpleInfoDTO::getName));
+
+
+        //
+
+
+        //5.封装 VO 对象返回
+        ArrayList<QuestionAdminVO> questionAdminVOS = new ArrayList<>();
+        interactionQuestionList
+                .forEach(interactionQuestion -> {
+                    QuestionAdminVO questionAdminVO = BeanUtils.copyProperties(interactionQuestion, QuestionAdminVO.class);
+                    UserDTO userDTO = userDTOMap.get(interactionQuestion.getUserId());
+                    if(userDTO!=null) {
+                        questionAdminVO.setUserName(userDTO.getName());
+                    }
+                    CourseSimpleInfoDTO courseSimpleInfoDTO = courseDTOMap.get(interactionQuestion.getCourseId());
+                    if(courseSimpleInfoDTO!=null) {
+                        questionAdminVO.setCourseName(courseSimpleInfoDTO.getName());
+                        //5.1 通过工具类，获取多级分类ID
+                        List<Long> categoryIds = courseSimpleInfoDTO.getCategoryIds();
+                        String categoryNames = categoryCache.getCategoryNames(categoryIds);
+                        questionAdminVO.setCategoryName(categoryNames); //分类名称
+                    }
+
+                    if(CollUtils.isNotEmpty(cateLogueMap)) {
+                        questionAdminVO.setChapterName(cateLogueMap.get(interactionQuestion.getChapterId())); //章名称
+                        questionAdminVO.setSectionName(cateLogueMap.get(interactionQuestion.getSectionId())); //节名称
+                    }
+                    questionAdminVOS.add(questionAdminVO);
+                });
+
+        return PageDTO.of(questionPage,questionAdminVOS);
     }
 
 

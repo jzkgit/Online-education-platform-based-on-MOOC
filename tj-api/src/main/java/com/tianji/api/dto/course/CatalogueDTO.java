@@ -6,11 +6,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author wusongsong
- * @since 2022/7/11 16:42
- * @version 1.0.0
- **/
 @Data
 @ApiModel(description = "课程目录")
 public class CatalogueDTO {
