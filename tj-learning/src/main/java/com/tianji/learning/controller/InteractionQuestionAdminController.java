@@ -50,5 +50,4 @@ public class InteractionQuestionAdminController {
         return questionService.queryAdminQuestionInfoById(id);
     }
 
-
 }

@@ -10,5 +10,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IInteractionReplyService extends IService<InteractionReply> {
 
 
+    /**
+     * 隐藏或显示评论————管理端
+     * @param id
+     * @param hidden
+     */
+    void whetherHiddenComment(Long id, boolean hidden);
+
+
 
 }

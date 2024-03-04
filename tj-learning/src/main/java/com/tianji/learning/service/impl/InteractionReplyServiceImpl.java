@@ -1,6 +1,7 @@
 package com.tianji.learning.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.api.client.user.UserClient;
@@ -9,6 +10,7 @@ import com.tianji.common.autoconfigure.mq.RabbitMqHelper;
 import com.tianji.common.constants.MqConstants;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.common.exceptions.BadRequestException;
+import com.tianji.common.exceptions.DbException;
 import com.tianji.common.utils.BeanUtils;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.UserContext;
@@ -37,6 +39,44 @@ import static com.tianji.common.constants.Constant.DATA_FIELD_NAME_LIKED_TIME;
 public class InteractionReplyServiceImpl extends ServiceImpl<InteractionReplyMapper, InteractionReply> implements IInteractionReplyService {
 
 
+    final InteractionReplyServiceImpl replyService;
 
+    final InteractionReplyMapper replyMapper;
+
+
+    /**
+     * 隐藏或显示评论————管理端
+     * @param id
+     * @param hidden
+     */
+    @Override
+    public void whetherHiddenComment(Long id, boolean hidden) {
+
+        //1.获取当前评论信息
+        InteractionReply interactionReply = replyService.lambdaQuery()
+                .eq(id != null, InteractionReply::getId, id)
+                .one();
+
+        //2.判断当前评论是否为回答信息
+        Integer replyTimes = interactionReply.getReplyTimes(); //获取评论数量
+        if(replyTimes>0){
+            //2.1 若是，则判断当前回答下是否有评论，隐藏对应评论
+            LambdaUpdateChainWrapper<InteractionReply> set = replyService.lambdaUpdate()
+                    .eq(InteractionReply::getAnswerId, interactionReply.getTargetReplyId())
+                    .set(InteractionReply::getHidden, hidden);
+            boolean update = replyService.update(set);
+            if(!update){
+                throw new DbException("修改回答状态失败!");
+            }
+        }else {
+            interactionReply.setHidden(hidden);
+            int update = replyMapper.updateById(interactionReply);
+            if(update<=0){
+                throw new DbException("修改评论状态失败!");
+            }
+        }
+
+
+    }
 
 }
