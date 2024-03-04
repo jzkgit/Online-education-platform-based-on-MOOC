@@ -14,6 +14,7 @@ import com.tianji.api.client.search.SearchClient;
 import com.tianji.api.client.user.UserClient;
 import com.tianji.api.dto.course.CataSimpleInfoDTO;
 import com.tianji.api.dto.course.CourseFullInfoDTO;
+import com.tianji.api.dto.course.CourseSearchDTO;
 import com.tianji.api.dto.course.CourseSimpleInfoDTO;
 import com.tianji.api.dto.user.UserDTO;
 import com.tianji.common.domain.dto.PageDTO;
@@ -415,9 +416,6 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
                 .collect(Collectors.toMap(CataSimpleInfoDTO::getId, CataSimpleInfoDTO::getName));
 
 
-        //
-
-
         //5.封装 VO 对象返回
         ArrayList<QuestionAdminVO> questionAdminVOS = new ArrayList<>();
         interactionQuestionList
@@ -444,6 +442,106 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
                 });
 
         return PageDTO.of(questionPage,questionAdminVOS);
+    }
+
+
+    /**
+     * 隐藏或显示问题————管理端
+     * @param id
+     * @param hidden
+     */
+    @Override
+    public void whetherHidden(Long id, boolean hidden) {
+
+        //1.查询对应的问题信息
+        InteractionQuestion question = questionService.lambdaQuery()
+                .eq(InteractionQuestion::getId, id)
+                .one();
+        if(question==null){
+            throw new DbException("当前问题信息不存在!");
+        }
+
+        //2.进行修改是否进行隐藏
+        question.setHidden(hidden);
+        int update = questionMapper.updateById(question);
+
+        //2.1 判断是否修改成功
+        if(update==0){
+            throw new DbException("修改问题信息失败!");
+        }
+
+    }
+
+
+    /**
+     * 根据ID查询问题详情————管理端
+     * @param id
+     */
+    @Override
+    public QuestionAdminVO queryAdminQuestionInfoById(Long id) {
+
+        QuestionAdminVO questionAdminVO = new QuestionAdminVO();
+
+        //1.获取问题信息
+        InteractionQuestion question = questionService.lambdaQuery()
+                .eq(InteractionQuestion::getId, id)
+                .one();
+        if(question==null){
+            throw new DbException("当前问题为空!");
+        }
+
+        BeanUtils.copyProperties(question,questionAdminVO);
+
+        //2.远程调用用户服务，获取用户信息
+        UserDTO userDTO = userClient.queryUserById(question.getUserId());
+        if(userDTO==null){
+            throw new DbException("当前用户信息为空!");
+        }
+
+        //3.远程调用课程服务，获取课程信息
+        List<CourseSimpleInfoDTO> simpleInfoList = courseClient.getSimpleInfoList(List.of(question.getCourseId()));
+        if(simpleInfoList==null){
+            throw new DbException("当前课程信息为空!");
+        }
+        Map<Long, CourseSimpleInfoDTO> courseInfoMap = simpleInfoList.stream()
+                .collect(Collectors.toMap(CourseSimpleInfoDTO::getId, c -> c));
+
+        //4.远程调用目录服务，获取章节信息
+        ArrayList<Long> chapterAndSectionIds = new ArrayList<>();
+        chapterAndSectionIds.add(question.getSectionId());
+        chapterAndSectionIds.add(question.getChapterId());
+        List<CataSimpleInfoDTO> cateSimpleInfoDTOS = catalogueClient.batchQueryCatalogue(chapterAndSectionIds);
+        if(cateSimpleInfoDTOS==null){
+            throw new DbException("当前章节信息为空!");
+        }
+        Map<Long, String> cateInfoMap = cateSimpleInfoDTOS.stream()
+                .collect(Collectors.toMap(CataSimpleInfoDTO::getId, CataSimpleInfoDTO::getName));
+
+        //5.调用工具类，获取三级分类信息
+        CourseSimpleInfoDTO courseSimpleInfoDTO = courseInfoMap.get(question.getCourseId());
+        List<Long> categoryIds = courseSimpleInfoDTO.getCategoryIds();
+        String categoryNames = categoryCache.getCategoryNames(categoryIds);
+        if(categoryNames==null){
+            throw new BadRequestException("分类信息为空!");
+        }
+
+        //6.远程调用，获取老师信息
+        CourseSearchDTO searchInfo = courseClient.getSearchInfo(question.getCourseId());
+        UserDTO teacher = userClient.queryUserById(searchInfo.getTeacher());
+        if(teacher==null){
+            throw new DbException("老师信息为空!");
+        }
+
+        //封装 VO 对象进行返回
+        questionAdminVO.setStatus(1);  //每当管理员进行查看对应问题时，则可以直接将状态设置为“已查看”
+        questionAdminVO.setUserName(userDTO.getName());
+        questionAdminVO.setUserIcon(userDTO.getIcon());
+        questionAdminVO.setCourseName(courseSimpleInfoDTO.getName());
+        questionAdminVO.setTeacherName(teacher.getName()); //任课老师名称
+        questionAdminVO.setChapterName(cateInfoMap.get(question.getChapterId())); //章名称
+        questionAdminVO.setSectionName(cateInfoMap.get(question.getSectionId())); //节名称
+        questionAdminVO.setCategoryName(categoryNames); //三级分类名称
+        return questionAdminVO;
     }
 
 
