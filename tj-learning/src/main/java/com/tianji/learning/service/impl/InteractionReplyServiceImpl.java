@@ -56,13 +56,16 @@ public class InteractionReplyServiceImpl extends ServiceImpl<InteractionReplyMap
         InteractionReply interactionReply = replyService.lambdaQuery()
                 .eq(id != null, InteractionReply::getId, id)
                 .one();
+        if(interactionReply==null){
+            return;
+        }
 
         //2.判断当前评论是否为回答信息
         Integer replyTimes = interactionReply.getReplyTimes(); //获取评论数量
         if(replyTimes>0){
             //2.1 若是，则判断当前回答下是否有评论，隐藏对应评论
             LambdaUpdateChainWrapper<InteractionReply> set = replyService.lambdaUpdate()
-                    .eq(InteractionReply::getAnswerId, interactionReply.getTargetReplyId())
+                    .eq(InteractionReply::getAnswerId, id)
                     .set(InteractionReply::getHidden, hidden);
             boolean update = replyService.update(set);
             if(!update){
@@ -75,7 +78,6 @@ public class InteractionReplyServiceImpl extends ServiceImpl<InteractionReplyMap
                 throw new DbException("修改评论状态失败!");
             }
         }
-
 
     }
 
