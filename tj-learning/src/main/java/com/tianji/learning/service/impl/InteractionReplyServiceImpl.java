@@ -1,6 +1,7 @@
 package com.tianji.learning.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,9 +15,13 @@ import com.tianji.common.exceptions.DbException;
 import com.tianji.common.utils.BeanUtils;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.UserContext;
+import com.tianji.learning.domain.dto.ReplyDTO;
 import com.tianji.learning.domain.po.InteractionQuestion;
 import com.tianji.learning.domain.po.InteractionReply;
+import com.tianji.learning.domain.query.ReplyPageQuery;
+import com.tianji.learning.domain.vo.ReplyVO;
 import com.tianji.learning.enums.QuestionStatus;
+import com.tianji.learning.mapper.InteractionQuestionMapper;
 import com.tianji.learning.mapper.InteractionReplyMapper;
 import com.tianji.learning.service.IInteractionQuestionService;
 import com.tianji.learning.service.IInteractionReplyService;
@@ -41,7 +46,11 @@ public class InteractionReplyServiceImpl extends ServiceImpl<InteractionReplyMap
 
     final InteractionReplyServiceImpl replyService;
 
+//    final InteractionQuestionServiceImpl questionService;  //避免相互注入的问题
+
     final InteractionReplyMapper replyMapper;
+
+    final InteractionQuestionMapper questionMapper;
 
 
     /**
@@ -80,5 +89,61 @@ public class InteractionReplyServiceImpl extends ServiceImpl<InteractionReplyMap
         }
 
     }
+
+
+    /**
+     * 新增评论或回答
+     * @param replyDTO
+     */
+    @Override
+    public void addCommentOrReply(ReplyDTO replyDTO) {
+
+        //1.获取当前回答或评论用户ID
+        Long userId = UserContext.getUser();
+
+        //1.1 进行新增回答信息
+        InteractionReply interactionReply = BeanUtils.copyProperties(replyDTO, InteractionReply.class);
+        interactionReply.setUserId(userId);
+        boolean save = replyService.save(interactionReply);
+        if(!save){
+            throw new DbException("新增回答信息失败!");
+        }
+
+        //2.根据是否存在上级回答的ID，来判断当前是评论还是回答
+        Long answerId = replyDTO.getAnswerId();
+
+        //2.1 查询当前问题信息
+        InteractionQuestion interactionQuestion = questionMapper.selectOne(Wrappers.<InteractionQuestion>lambdaQuery()
+                .eq(InteractionQuestion::getId, replyDTO.getQuestionId()));
+
+        if(answerId==0L){
+            //2.2 是回答，则需要修改最近一次的回答ID，并回答数加一
+            interactionQuestion.setLatestAnswerId(interactionReply.getAnswerId());
+            interactionQuestion.setAnswerTimes(interactionQuestion.getAnswerTimes()+1);
+
+        }else {
+            //2.3 是评论，则累加回答下的评论次数
+            InteractionReply reply = replyService.lambdaQuery()
+                    .eq(InteractionReply::getId, replyDTO.getAnswerId())
+                    .one();
+            reply.setReplyTimes(reply.getReplyTimes()+1);
+            boolean update = replyService.updateById(reply);
+            if(!update){
+                throw new DbException("当前评论的次数修改失败!");
+            }
+        }
+
+        //3.判断是否是学生提交的回答或评论
+        //3.1 若是，则进行修改问题的查看状态(0-未查看)
+        if(replyDTO.getIsStudent()){
+            interactionQuestion.setStatus(QuestionStatus.UN_CHECK);
+        }
+        int update = questionMapper.updateById(interactionQuestion);
+        if(update<0){
+            throw new DbException("当前回答信息的最近一次回答者修改失败!");
+        }
+
+    }
+
 
 }

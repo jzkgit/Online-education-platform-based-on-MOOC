@@ -2,6 +2,9 @@ package com.tianji.learning.controller;
 
 
 import com.tianji.common.domain.dto.PageDTO;
+import com.tianji.learning.domain.dto.ReplyDTO;
+import com.tianji.learning.domain.query.ReplyPageQuery;
+import com.tianji.learning.domain.vo.ReplyVO;
 import com.tianji.learning.service.impl.InteractionReplyServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,5 +30,14 @@ public class InteractionReplyController {
 
         replyService.whetherHiddenComment(id,hidden);
     }
+
+
+    @ApiOperation("新增评论或回答")
+    @PostMapping
+    public void addCommentOrReply(ReplyDTO replyDTO){
+
+        replyService.addCommentOrReply(replyDTO);
+    }
+
 
 }
