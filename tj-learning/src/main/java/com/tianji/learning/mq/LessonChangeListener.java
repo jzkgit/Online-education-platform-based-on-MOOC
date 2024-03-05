@@ -38,7 +38,6 @@ public class LessonChangeListener {
 
         //2.保存课程到课表
         lessonService.addUserLesson(basicDTO.getUserId(),basicDTO.getCourseIds());
-
     }
 
 
