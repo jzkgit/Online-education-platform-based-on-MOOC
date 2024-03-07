@@ -12,7 +12,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Slf4j
-@EnableScheduling
+@EnableScheduling  //开启定时任务
 @SpringBootApplication
 @MapperScan("com.tianji.remark.mapper")
 public class RemarkApplication {

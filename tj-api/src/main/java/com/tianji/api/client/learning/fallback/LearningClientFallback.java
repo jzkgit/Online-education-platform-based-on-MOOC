@@ -28,4 +28,5 @@ public class LearningClientFallback implements FallbackFactory<LearningClient> {
             }
         };
     }
+
 }

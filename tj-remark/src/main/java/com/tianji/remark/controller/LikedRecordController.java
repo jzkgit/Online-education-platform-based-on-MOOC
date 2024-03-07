@@ -2,7 +2,7 @@ package com.tianji.remark.controller;
 
 import com.tianji.remark.domain.dto.LikeRecordFormDTO;
 import com.tianji.remark.service.ILikedRecordService;
-import com.tianji.remark.service.impl.LikedRecordServiceImpl;
+import com.tianji.remark.service.impl.LikedRecordRedisServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,14 @@ import java.util.Set;
 public class LikedRecordController {
 
 
-    final LikedRecordServiceImpl likedRecordService;
+    final LikedRecordRedisServiceImpl likedRedisService;
 
 
     @ApiOperation("点赞或取消点赞服务")
     @PostMapping
     public void likeOrUnlike(@RequestBody @Validated LikeRecordFormDTO recordFormDTO){
 
-        likedRecordService.likeOrUnlike(recordFormDTO);
+        likedRedisService.likeOrUnlike(recordFormDTO);
     }
 
 
@@ -38,7 +38,7 @@ public class LikedRecordController {
     @GetMapping("/list")
     public Set<Long> queryWhetherLiked(@RequestParam("bizIds") List<Long> bizIds){
 
-        return likedRecordService.queryWhetherLiked(bizIds);
+        return likedRedisService.queryWhetherLiked(bizIds);
     }
 
 }

@@ -26,4 +26,12 @@ public interface ILikedRecordService extends IService<LikedRecord> {
      */
     Set<Long> queryWhetherLiked(List<Long> bizIds);
 
+
+    /**
+     * 读取点赞信息
+     * @param type
+     * @param max_biz_size
+     */
+    void readLikesAndMsg(String type, int max_biz_size);
+
 }
