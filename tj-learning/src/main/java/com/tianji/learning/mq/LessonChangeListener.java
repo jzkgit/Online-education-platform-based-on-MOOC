@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 /**
  * MQ 购买课程消息通知
  */
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor //注入对应接口类的构造类
 public class LessonChangeListener {
 
