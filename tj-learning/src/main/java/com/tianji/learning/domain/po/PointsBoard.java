@@ -28,7 +28,7 @@ public class PointsBoard implements Serializable {
     private Long id;
 
     /**
-     * 学生id
+     * 用户id
      */
     private Long userId;
 
@@ -48,6 +48,5 @@ public class PointsBoard implements Serializable {
      */
     @TableField(exist = false)
     private Integer season;
-
 
 }

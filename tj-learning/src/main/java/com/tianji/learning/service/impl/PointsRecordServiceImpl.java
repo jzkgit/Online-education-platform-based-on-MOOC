@@ -77,7 +77,7 @@ public class PointsRecordServiceImpl extends ServiceImpl<PointsRecordMapper, Poi
             }
         }
 
-        //2.若没有上限，则直接进行保存当前用户该类型下的积分记录
+        //2.若没有上限，则直接进行保存当前用户该类型下的积分记录到 DB
         PointsRecord record = new PointsRecord();
         record.setPoints(todayPoints);
         record.setType(recordType);
@@ -92,7 +92,6 @@ public class PointsRecordServiceImpl extends ServiceImpl<PointsRecordMapper, Poi
 
         //3.2 给对应用户下【累加每次获取不同类型下的总分值】
         redisTemplate.opsForZSet().incrementScore(recordKey,signInMessage.getUserId().toString(),totalPoints);
-
     }
 
 

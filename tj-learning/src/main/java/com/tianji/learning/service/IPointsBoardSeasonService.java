@@ -13,5 +13,9 @@ import java.util.List;
 public interface IPointsBoardSeasonService extends IService<PointsBoardSeason> {
 
 
+    /**
+     * 创建上个赛季的表
+     */
+    void createPointsBoardLatestTable(Integer id);
 
 }

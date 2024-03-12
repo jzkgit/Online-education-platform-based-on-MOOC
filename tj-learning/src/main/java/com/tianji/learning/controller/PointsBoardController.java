@@ -3,7 +3,9 @@ package com.tianji.learning.controller;
 import com.tianji.common.utils.BeanUtils;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.learning.domain.po.PointsBoardSeason;
+import com.tianji.learning.domain.query.PointsBoardQuery;
 import com.tianji.learning.domain.vo.PointsBoardSeasonVO;
+import com.tianji.learning.domain.vo.PointsBoardVO;
 import com.tianji.learning.service.impl.PointsBoardSeasonServiceImpl;
 import com.tianji.learning.service.impl.PointsBoardServiceImpl;
 import io.swagger.annotations.Api;
@@ -29,6 +31,8 @@ public class PointsBoardController {
 
     final PointsBoardSeasonServiceImpl seasonService;
 
+    final PointsBoardServiceImpl boardService;
+
 
     @ApiOperation("查询赛季列表信息")
     @GetMapping("/seasons/list")
@@ -51,7 +55,12 @@ public class PointsBoardController {
 
 
 
+    @ApiOperation("查询学霸积分天梯榜")
+    @GetMapping
+    public PointsBoardVO queryStudyBoard(PointsBoardQuery boardQuery){
 
+        return boardService.queryStudyBoard(boardQuery);
+    }
 
 
 }
