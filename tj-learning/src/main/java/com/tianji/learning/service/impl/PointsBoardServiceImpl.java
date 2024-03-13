@@ -1,12 +1,15 @@
 package com.tianji.learning.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.api.client.user.UserClient;
 import com.tianji.api.dto.user.UserDTO;
+import com.tianji.common.domain.query.PageQuery;
 import com.tianji.common.exceptions.BizIllegalException;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.StringUtils;
 import com.tianji.common.utils.UserContext;
+import com.tianji.learning.constants.LearningConstants;
 import com.tianji.learning.constants.RedisConstants;
 import com.tianji.learning.domain.po.PointsBoard;
 import com.tianji.learning.domain.query.PointsBoardQuery;
@@ -14,6 +17,7 @@ import com.tianji.learning.domain.vo.PointsBoardItemVO;
 import com.tianji.learning.domain.vo.PointsBoardVO;
 import com.tianji.learning.mapper.PointsBoardMapper;
 import com.tianji.learning.service.IPointsBoardService;
+import com.tianji.learning.utils.TableInfoContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -21,10 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +75,7 @@ public class PointsBoardServiceImpl extends ServiceImpl<PointsBoardMapper, Point
         }
 
 
-        //4.查询其他人的榜单排名信息（根据DB还是 redis 进行查询，由 season 做决定）
+        //4.查询所有人的榜单排名信息（根据DB还是 redis 进行查询，由 season 做决定）
         List<PointsBoard> pointsBoards = new ArrayList<>();
         pointsBoards = query?queryCurrentBoard(recordKey,boardQuery):queryHistoryBoard(boardQuery);
         if(pointsBoards==null){
@@ -116,10 +118,36 @@ public class PointsBoardServiceImpl extends ServiceImpl<PointsBoardMapper, Point
     /**
      * 查询所有人【历史】赛季的排行信息 DB
      */
-    private List<PointsBoard> queryHistoryBoard(PointsBoardQuery season) {
+    private List<PointsBoard> queryHistoryBoard(PointsBoardQuery boardQuery) {
 
+        //1.拼接将要进行查询的赛季表名（之后的 CRUD 都将在这张表中进行）
+        TableInfoContext.setInfo(LearningConstants.POINTS_BOARD_TABLE_PREFIX+boardQuery.getSeason());
 
-        return null;
+        //2.从 DB 中获取历史赛季排名信息
+        Page<PointsBoard> boardPage = boardService.lambdaQuery()
+                .eq(PointsBoard::getSeason, boardQuery.getSeason())
+                .page(boardQuery.toMpPage("points", false)); //将分值进行倒序排列
+
+        /*
+        pointsBoard.setUserId(Long.valueOf(userId));
+            pointsBoard.setPoints(score.intValue());
+            pointsBoard.setRank(rank++);
+         */
+        //3.获取历史赛季信息，进行遍历封装 list 进行返回
+        List<PointsBoard> records = boardPage.getRecords();
+        if(records==null){
+            return CollUtils.emptyList();
+        }
+
+        //3.1 将排名信息中的 rank 进行赋值
+        records.forEach(new Consumer<PointsBoard>() {
+                    @Override
+                    public void accept(PointsBoard pointsBoard) {
+                        pointsBoard.setRank(pointsBoard.getId().intValue());
+                    }
+                });
+
+        return records;
     }
 
 
@@ -170,10 +198,24 @@ public class PointsBoardServiceImpl extends ServiceImpl<PointsBoardMapper, Point
      */
     private PointsBoard queryMyHistoryBoard(Long season,Long userId) {
 
-        //todo 1.根据条件进行查询
+        //1.计算表名
+        TableInfoContext.setInfo(LearningConstants.POINTS_BOARD_TABLE_PREFIX+season);
 
+        //2.从 DB 中查询
+        Optional<PointsBoard> pointsBoard = boardService.lambdaQuery()
+                .eq(PointsBoard::getUserId, userId)
+                .oneOpt();
 
-        return null;
+        //3.进行封装 po 返回
+        if(pointsBoard.isPresent()){
+
+            //3.1获取数据
+            PointsBoard board = pointsBoard.get();
+            board.setRank(board.getId().intValue());
+            return board;
+        }else {
+            return null;
+        }
     }
 
 

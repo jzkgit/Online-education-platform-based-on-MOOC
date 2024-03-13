@@ -57,13 +57,13 @@ public class PointBoardPersistentHandler {
             return;
         }
 
-        //3.创建上赛季的榜单表
+        //3.创建上赛季的榜单表（物理意义上的sql表）
         seasonService.createPointsBoardLatestTable(boardSeason.getId());
     }
 
 
     /**
-     * 【持久化数据到创建的历史榜单表中】
+     * 【持久化"数据"到创建的历史榜单表中】
      *
      * 这里使用【分片广播】的形式，进行不同赛季表的赋值操作
      */
@@ -97,12 +97,12 @@ public class PointBoardPersistentHandler {
         int shardIndex = XxlJobHelper.getShardIndex();  //获取当前分片的下表索引(下标从0开始)
         int shardTotal = XxlJobHelper.getShardTotal();  //获取总分片数
 
-
         int pageNo = shardIndex +1;  //由于分片索引下标从0开始，所以这里进行加一
         int pageSize = 1000;  //每页查询的数据条数
         PointsBoardQuery pointsBoardQuery = new PointsBoardQuery();
         pointsBoardQuery.setPageNo(pageNo);
         pointsBoardQuery.setPageSize(pageSize);
+
         while (true){
 
             List<PointsBoard> pointsBoards = boardService.queryCurrentBoard(recordKey, pointsBoardQuery);
@@ -128,7 +128,27 @@ public class PointBoardPersistentHandler {
 
         //6.清空 TableInfoContext 线程中的历史表名
         TableInfoContext.remove();
+    }
 
+
+
+    /**
+     * 定时删除 redis 上的历史榜单的数据，节省空间
+     */
+    @XxlJob(value = "clearPointsBoardFromRedis")
+    public void clearPointsBoardInfoByRedis(){
+
+        //1.获取 key 值，即上个赛季
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime minusMonths = now.minusMonths(1);
+        String format = minusMonths.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String seasonKey = RedisConstants.POINTS_BOARD_KEY_PREFIX  + format;
+
+        //2.在 redis 的 ZSet 中删除对应 key 值的数据，即上个赛季的信息
+        /*
+            unlink:在删除大量数据时，可立即返回，不会阻塞空间，并释放空间
+         */
+        redisTemplate.unlink(seasonKey);
     }
 
 }
