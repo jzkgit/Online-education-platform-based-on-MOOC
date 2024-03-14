@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -220,15 +221,33 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
             throw new BadRequestException("非法参数!");
         }
 
-        //1.校验当前优惠券的状态
+        //1.校验当前优惠券的状态，只有待发放和暂停状态才能进行发放优惠券
         Coupon coupon = couponService.getById(id);
-        if(coupon==null||!coupon.getStatus().equals(DRAFT)||!coupon.getStatus().equals(UN_ISSUE)){
+        if(coupon==null||!coupon.getStatus().equals(DRAFT)||!coupon.getStatus().equals(PAUSE)){
             throw new BadRequestException("当前优惠券不存在或者在使用中!");
         }
 
-        //2.
+        //2.判断当前优惠券是否为立刻发放（true：是  false: 否）
+        LocalDateTime now = LocalDateTime.now();
+        boolean whetherIssue = coupon.getIssueBeginTime()==null || !coupon.getIssueBeginTime().isAfter(now);
 
+        //3.进行判断是否为立刻发放，进行更新赋值时间状态
+        if(whetherIssue){
+            //3.1 是立刻发放
+            coupon.setIssueBeginTime(couponIssueFormDTO.getIssueBeginTime()==null?now:couponIssueFormDTO.getIssueBeginTime());
+            coupon.setIssueEndTime(couponIssueFormDTO.getIssueEndTime());
+            coupon.setStatus(ISSUING);  //发放中
+        }else {
+            //3.2 不是立刻发放
+            coupon.setIssueBeginTime(couponIssueFormDTO.getIssueBeginTime());
+            coupon.setIssueEndTime(couponIssueFormDTO.getIssueEndTime());
+            coupon.setStatus(UN_ISSUE);
+        }
+        coupon.setTermBeginTime(couponIssueFormDTO.getTermBeginTime());
+        coupon.setTermEndTime(couponIssueFormDTO.getTermEndTime());
+        coupon.setTermDays(couponIssueFormDTO.getTermDays());
 
+        couponService.updateById(coupon);
     }
 
 
