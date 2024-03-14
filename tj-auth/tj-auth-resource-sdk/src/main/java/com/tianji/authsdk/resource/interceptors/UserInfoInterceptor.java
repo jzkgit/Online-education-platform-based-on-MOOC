@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- *
+ * 将用户信息做保存
  */
 @Slf4j
 public class UserInfoInterceptor implements HandlerInterceptor {
