@@ -8,15 +8,19 @@ import com.tianji.common.autoconfigure.mq.RabbitMqHelper;
 import com.tianji.common.constants.MqConstants;
 
 import com.tianji.common.exceptions.BadRequestException;
+import com.tianji.common.exceptions.BizIllegalException;
 import com.tianji.common.utils.UserContext;
 import com.tianji.promotion.domain.po.Coupon;
+import com.tianji.promotion.domain.po.ExchangeCode;
 import com.tianji.promotion.domain.po.UserCoupon;
+import com.tianji.promotion.enums.ExchangeCodeStatus;
 import com.tianji.promotion.enums.UserCouponStatus;
 import com.tianji.promotion.mapper.CouponMapper;
 import com.tianji.promotion.mapper.UserCouponMapper;
 import com.tianji.promotion.service.ICouponService;
 import com.tianji.promotion.service.IExchangeCodeService;
 import com.tianji.promotion.service.IUserCouponService;
+import com.tianji.promotion.utils.CodeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -41,6 +45,10 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
     final IUserCouponService userCouponService;
 
     final CouponMapper couponMapper;
+
+    final StringRedisTemplate redisTemplate;
+
+    final IExchangeCodeService codeService;
 
 
     /**
@@ -97,7 +105,7 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
 //        coupon.setIssueNum(coupon.getIssueNum()+1);
 //        couponMapper.updateById(coupon);
         /*
-            当前优惠券领取业务，再多机版下需要保证原子性 【这里使用 sql 保证业务的原子性】
+            当前优惠券领取业务，再联机版下需要保证原子性 【这里使用 乐观锁 保证业务的原子性】
          */
         couponMapper.incrIssueNum(id);
 
@@ -129,6 +137,79 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
         userCoupon.setTermBeginTime(termBeginTime);
         userCoupon.setTermEndTime(termEndTime);
         userCouponService.save(userCoupon);
+    }
+
+
+    /**
+     * 兑换码兑换优惠券
+     */
+    @Override
+    public void exchangeCoupon(String code) {
+
+        //0.校验参数，获取当前用户ID
+        if(code==null){
+            throw new BadRequestException("无效参数!");
+        }
+        Long userId = UserContext.getUser();
+
+        //1.解析兑换码
+        long parseCode = CodeUtil.parseCode(code);
+
+        //2.判断当前兑换码是否已经兑换过【这里使用redis中的bitMap数据类型】
+        boolean res;
+        res = codeService.updateExchangeCodeMark(parseCode,true);
+        if(res){
+            throw new BizIllegalException("当前兑换码已经被使用!");
+        }
+
+        try {
+            //3.查询当前兑换码是否存在
+            ExchangeCode exchangeCode = codeService.lambdaQuery()
+                    .eq(ExchangeCode::getCode, code)
+                    .eq(ExchangeCode::getUserId, userId)
+                    .one();
+            if(exchangeCode==null){
+                throw new BadRequestException("当前兑换码不存在!");
+            }
+
+            //4.判断是否过期
+            LocalDateTime now = LocalDateTime.now();
+            if(exchangeCode.getExpiredTime().isBefore(now)){
+                throw new BadRequestException("当前优惠券已过期!");
+            }
+
+            //5.判断兑换码对应的优惠券是否达到限领数量
+            //5.1 根据兑换码，获取对应的优惠券
+            Long couponId = exchangeCode.getExchangeTargetId();
+            Coupon coupon = couponMapper.selectById(couponId);
+            if(coupon.getIssueNum()>=coupon.getTotalNum()){
+                throw new BadRequestException("已经达到了限领的数量");
+            }
+
+            //6.若以上的条件都符合，则优惠券的发放数量加一
+            int issueNum = couponMapper.incrIssueNum(couponId);
+            if(issueNum<0){
+                throw new BadRequestException("优惠券更新数量失败!");
+            }
+
+            //7.保存对应用户的优惠券
+            savaUserCoupon(userId,coupon);
+
+            //8.更新当前兑换码的状态
+            codeService.lambdaUpdate().set(ExchangeCode::getType,ExchangeCodeStatus.USED)
+                    .set(ExchangeCode::getUserId,userId)
+                    .eq(ExchangeCode::getExchangeTargetId,couponId)
+                    .eq(ExchangeCode::getId,parseCode).update();
+
+        }catch (Exception exception){
+            //10.将兑换码的状态进行重置
+            res = codeService.updateExchangeCodeMark(parseCode,false);
+            if(res){
+                log.debug("重置兑换码成功!");
+            }
+            throw exception;
+        }
+
     }
 
 

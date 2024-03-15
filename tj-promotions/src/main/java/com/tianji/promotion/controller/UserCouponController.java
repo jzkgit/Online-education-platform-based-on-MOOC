@@ -30,4 +30,13 @@ public class UserCouponController {
     }
 
 
+
+    @ApiOperation("兑换码兑换优惠券")
+    @PostMapping("/{code}/exchage")
+    public void exchangeCoupon(@PathVariable("code")String code){
+
+        userCouponService.exchangeCoupon(code);
+    }
+
+
 }

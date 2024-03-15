@@ -1,27 +1,19 @@
 package com.tianji.promotion.service.impl;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tianji.common.domain.dto.PageDTO;
-import com.tianji.common.utils.CollUtils;
 import com.tianji.promotion.constants.PromotionConstants;
 import com.tianji.promotion.domain.po.Coupon;
 import com.tianji.promotion.domain.po.ExchangeCode;
-import com.tianji.promotion.domain.query.CodeQuery;
-import com.tianji.promotion.domain.vo.ExchangeCodeVO;
 import com.tianji.promotion.mapper.ExchangeCodeMapper;
 import com.tianji.promotion.service.IExchangeCodeService;
 import com.tianji.promotion.utils.CodeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 import static com.tianji.promotion.constants.PromotionConstants.*;
 
@@ -72,6 +64,21 @@ public class ExchangeCodeServiceImpl extends ServiceImpl<ExchangeCodeMapper, Exc
 
         //3.批量保存兑换码到 DB
         codeService.saveBatch(exchangeCodes);
+    }
+
+
+    /**
+     * 结合 redis 判断当前兑换码是否已经使用过
+     */
+    @Override
+    public boolean updateExchangeCodeMark(long parseCode, boolean mark) {
+
+        //1.拼接 key
+        String codeKey = COUPON_CODE_MAP_KEY;
+
+        Boolean res = redisTemplate.opsForValue().setBit(codeKey, parseCode, mark);
+
+        return res!=null && res;
     }
 
 

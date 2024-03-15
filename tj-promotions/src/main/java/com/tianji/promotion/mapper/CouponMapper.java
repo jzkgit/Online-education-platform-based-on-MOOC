@@ -14,12 +14,11 @@ public interface CouponMapper extends BaseMapper<Coupon> {
 
 
     /**
-     * 更新优惠券数量
+     * 更新优惠券发放的数量
      * @param couponId
      */
     @Update("UPDATE coupon SET issue_num = issue_num + 1 WHERE id = #{couponId} AND issue_num < total_num") //原子性
     int incrIssueNum(@Param("couponId") Long couponId);
-
 
 
 }

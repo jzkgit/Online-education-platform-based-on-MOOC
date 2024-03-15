@@ -1,6 +1,7 @@
 package com.tianji.promotion.controller;
 
 import com.tianji.common.domain.dto.PageDTO;
+import com.tianji.promotion.service.IExchangeCodeService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/codes")
 public class ExchangeCodeController {
+
+
+    final IExchangeCodeService codeService;
+
 
 
 

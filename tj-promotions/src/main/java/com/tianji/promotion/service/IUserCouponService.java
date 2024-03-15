@@ -21,4 +21,11 @@ public interface IUserCouponService extends IService<UserCoupon> {
      */
     void receiveCoupon(Long id);
 
+
+    /**
+     * 兑换码兑换优惠券
+     * @param code
+     */
+    void exchangeCoupon(String code);
+
 }
