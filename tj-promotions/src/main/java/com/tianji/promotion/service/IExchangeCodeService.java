@@ -13,5 +13,10 @@ import com.tianji.promotion.domain.vo.ExchangeCodeVO;
 public interface IExchangeCodeService extends IService<ExchangeCode> {
 
 
+    /**
+     * 异步生成兑换码
+     * @param coupon
+     */
+    void getExchangeCodeInfo(Coupon coupon);
 
 }

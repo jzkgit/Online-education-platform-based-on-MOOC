@@ -3,6 +3,7 @@ package com.tianji.promotion.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.promotion.domain.dto.UserCouponDTO;
+import com.tianji.promotion.domain.po.UserCoupon;
 import com.tianji.promotion.domain.query.UserCouponQuery;
 import com.tianji.promotion.domain.vo.CouponVO;
 
@@ -14,5 +15,10 @@ import java.util.List;
 public interface IUserCouponService extends IService<UserCoupon> {
 
 
+    /**
+     * 领取优惠券
+     * @param id
+     */
+    void receiveCoupon(Long id);
 
 }

@@ -38,5 +38,4 @@ public class CouponScope implements Serializable {
      */
     private Long bizId;
 
-
 }

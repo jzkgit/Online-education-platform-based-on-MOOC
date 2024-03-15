@@ -25,7 +25,7 @@ public class ExchangeCode implements Serializable {
     /**
      * 兑换码id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)  //雪花算法策略
+    @TableId(value = "id", type = IdType.INPUT) //手动输入主键
     private Integer id;
 
     /**

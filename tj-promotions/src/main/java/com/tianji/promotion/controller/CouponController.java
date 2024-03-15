@@ -6,6 +6,7 @@ import com.tianji.promotion.domain.dto.CouponIssueFormDTO;
 import com.tianji.promotion.domain.query.CouponQuery;
 import com.tianji.promotion.domain.vo.CouponDetailVO;
 import com.tianji.promotion.domain.vo.CouponPageVO;
+import com.tianji.promotion.domain.vo.CouponVO;
 import com.tianji.promotion.service.ICouponService;
 import com.tianji.promotion.service.impl.CouponServiceImpl;
 import io.swagger.annotations.Api;
@@ -78,5 +79,14 @@ public class CouponController {
 
         couponService.issueCoupons(id,couponIssueFormDTO);
     }
+
+
+    @ApiOperation("查询发放中的优惠券——用户端")
+    @GetMapping("/list")
+    public List<CouponVO> queryIssuingCoupons(){
+
+        return couponService.queryIssuingCoupons();
+    }
+
 
 }

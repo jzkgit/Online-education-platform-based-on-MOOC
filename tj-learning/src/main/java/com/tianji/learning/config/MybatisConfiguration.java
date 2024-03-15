@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  MyBatis-Plus 动态表名拦截器
+ */
 @Configuration
 public class MybatisConfiguration {
 

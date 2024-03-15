@@ -1,5 +1,6 @@
 package com.tianji.promotion.controller;
 
+import com.tianji.promotion.service.IUserCouponService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,6 +19,15 @@ import java.util.List;
 public class UserCouponController {
 
 
+    final IUserCouponService userCouponService;
+
+
+    @ApiOperation("领取优惠券")
+    @PostMapping("/{id}/receive")
+    public void receiveCoupon(@PathVariable("id")Long id){
+
+        userCouponService.receiveCoupon(id);
+    }
 
 
 }

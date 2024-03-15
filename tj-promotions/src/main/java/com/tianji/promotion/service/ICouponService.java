@@ -8,6 +8,9 @@ import com.tianji.promotion.domain.po.Coupon;
 import com.tianji.promotion.domain.query.CouponQuery;
 import com.tianji.promotion.domain.vo.CouponDetailVO;
 import com.tianji.promotion.domain.vo.CouponPageVO;
+import com.tianji.promotion.domain.vo.CouponVO;
+
+import java.util.List;
 
 /**
  * 优惠券的规则信息 服务类
@@ -58,5 +61,13 @@ public interface ICouponService extends IService<Coupon> {
      * @param couponIssueFormDTO
      */
     void issueCoupons(Long id, CouponIssueFormDTO couponIssueFormDTO);
+
+
+    /**
+     * 查询发放中的优惠券——用户端
+     * @return
+     */
+    List<CouponVO> queryIssuingCoupons();
+
 
 }
