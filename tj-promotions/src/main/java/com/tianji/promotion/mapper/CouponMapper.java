@@ -13,8 +13,9 @@ import java.util.List;
 public interface CouponMapper extends BaseMapper<Coupon> {
 
 
+
     /**
-     * 更新优惠券发放的数量
+     * 更新优惠券发放的数量，这里引入了【乐观锁】的概念
      * @param couponId
      */
     @Update("UPDATE coupon SET issue_num = issue_num + 1 WHERE id = #{couponId} AND issue_num < total_num") //原子性

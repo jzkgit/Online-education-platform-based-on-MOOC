@@ -55,7 +55,7 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
      * 领取优惠券
      */
     @Override
-    @Transactional  //当存在一个以上的 CRUD 时，进行开启事务控制
+//    @Transactional  //当存在一个以上的 CRUD 时，进行开启事务控制
     public void receiveCoupon(Long id) {
 
         if(id==null){
@@ -86,16 +86,39 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
             throw new BadRequestException("当前优惠券不充足，领取失败!");
         }
 
+
+        /*
+            以下步骤需要实现原子性，存在超卖问题
+         */
+        synchronized (userId.toString().intern()) {  //这里使用 .intern，表示当前字符串若之前存在，则从常量池中进行获取【保证地址的一致性】
+
+            saveCouponAndUserCouponInfo(id, userId, coupon);
+        }
+
+    }
+
+
+
+    /*********************************************
+     * 保存优惠券、用户券信息
+     * *
+     * 【避免超卖问题】，这里使用事务以及乐观锁、悲观锁策略
+     * *
+     * *******************************************
+     */
+    @Transactional
+    public void saveCouponAndUserCouponInfo(Long couponId, Long userId, Coupon coupon) {
+
         //4.是否超出每人限领数量
         //4.1 查询当前用户是否已经领取当前优惠券，若是，领取了几张
         List<UserCoupon> couponList = userCouponService.lambdaQuery()
-                .eq(UserCoupon::getCouponId, id)
+                .eq(UserCoupon::getCouponId, couponId)
                 .eq(UserCoupon::getUserId, userId)
                 .eq(UserCoupon::getStatus, UserCouponStatus.UNUSED)
                 .list();
-        if(couponList!=null){
+        if (couponList != null) {
             long count = couponList.size();
-            if(count>=coupon.getUserLimit()){
+            if (count >= coupon.getUserLimit()) {
                 throw new BadRequestException("你已经达到领取上限，领取失败!");
             }
         }
@@ -107,12 +130,10 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
         /*
             当前优惠券领取业务，再联机版下需要保证原子性 【这里使用 乐观锁 保证业务的原子性】
          */
-        couponMapper.incrIssueNum(id);
+        couponMapper.incrIssueNum(couponId);
 
-
-        //5.1 【保存用户券】
-        savaUserCoupon(userId,coupon);
-
+        //5.1 【保存用户券信息】
+        savaUserCoupon(userId, coupon);
     }
 
 

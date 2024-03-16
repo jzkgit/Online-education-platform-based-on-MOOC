@@ -68,7 +68,7 @@ public class ExchangeCodeServiceImpl extends ServiceImpl<ExchangeCodeMapper, Exc
 
 
     /**
-     * 结合 redis 判断当前兑换码是否已经使用过
+     * 结合 redis 判断当前兑换码是否已经使用过，
      */
     @Override
     public boolean updateExchangeCodeMark(long parseCode, boolean mark) {
@@ -76,6 +76,7 @@ public class ExchangeCodeServiceImpl extends ServiceImpl<ExchangeCodeMapper, Exc
         //1.拼接 key
         String codeKey = COUPON_CODE_MAP_KEY;
 
+        //2.使用 bitMap 进行判断
         Boolean res = redisTemplate.opsForValue().setBit(codeKey, parseCode, mark);
 
         return res!=null && res;
