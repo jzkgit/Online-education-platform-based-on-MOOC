@@ -12,6 +12,11 @@ public class RedisLock {
     private final String key;
     private final StringRedisTemplate redisTemplate;
 
+    /**
+     * 加分布式锁
+     * @param leaseTime 加锁时间
+     * @param unit 单位
+     */
     public boolean tryLock(long leaseTime, TimeUnit unit){
         // 1.获取线程名称
         String value = Thread.currentThread().getName();
@@ -21,7 +26,12 @@ public class RedisLock {
         return BooleanUtils.isTrue(success);
     }
 
+
+    /**
+     * 释放锁
+     */
     public void unlock(){
         redisTemplate.delete(key);
     }
+
 }
