@@ -22,6 +22,7 @@ import com.tianji.promotion.service.IExchangeCodeService;
 import com.tianji.promotion.service.IUserCouponService;
 import com.tianji.promotion.utils.CodeUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -92,7 +93,11 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
          */
         synchronized (userId.toString().intern()) {  //这里使用 .intern，表示当前字符串若之前存在，则从常量池中进行获取【保证地址的一致性】
 
-            saveCouponAndUserCouponInfo(id, userId, coupon);
+            //这里获取当前类的代理对象，使用代理对象调用当前事务方法
+            IUserCouponService userCouponProxy = (IUserCouponService) AopContext.currentProxy();
+            userCouponProxy.saveCouponAndUserCouponInfo(id, userId, coupon);
+
+//            saveCouponAndUserCouponInfo(id, userId, coupon);    //这是调用原对象的方法，即非事务方法调用事务方法，事务失效
         }
 
     }
@@ -135,6 +140,8 @@ public class UserCouponServiceImpl extends ServiceImpl<UserCouponMapper, UserCou
         //5.1 【保存用户券信息】
         savaUserCoupon(userId, coupon);
     }
+/**********************************************************************************************************************/
+
 
 
 

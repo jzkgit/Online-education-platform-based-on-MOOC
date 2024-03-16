@@ -3,6 +3,7 @@ package com.tianji.promotion.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.promotion.domain.dto.UserCouponDTO;
+import com.tianji.promotion.domain.po.Coupon;
 import com.tianji.promotion.domain.po.UserCoupon;
 import com.tianji.promotion.domain.query.UserCouponQuery;
 import com.tianji.promotion.domain.vo.CouponVO;
@@ -27,5 +28,16 @@ public interface IUserCouponService extends IService<UserCoupon> {
      * @param code
      */
     void exchangeCoupon(String code);
+
+
+
+    /*********************************************
+     * 保存优惠券、用户券信息
+     * *
+     * 【避免超卖问题】，这里使用事务以及乐观锁、悲观锁策略
+     * *
+     * *******************************************
+     */
+    void saveCouponAndUserCouponInfo(Long id, Long userId, Coupon coupon);
 
 }
