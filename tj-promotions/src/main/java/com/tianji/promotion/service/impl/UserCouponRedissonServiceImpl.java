@@ -14,6 +14,7 @@ import com.tianji.promotion.mapper.UserCouponMapper;
 import com.tianji.promotion.service.IExchangeCodeService;
 import com.tianji.promotion.service.IUserCouponService;
 import com.tianji.promotion.utils.CodeUtil;
+import com.tianji.promotion.utils.MyLock;
 import com.tianji.promotion.utils.RedisLock;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
@@ -130,26 +131,41 @@ public class UserCouponRedissonServiceImpl extends ServiceImpl<UserCouponMapper,
 /*******************************************************************************************************************************/
 
 
+
+/*******************************************************************************************************************************/
         /*****************************
          * 这里使用 redisson 实现分布式锁
          ****************************/
+//        String userKey = "lock:coupon:uid" + userId;
+//        RLock redissonLock = redissonClient.getLock(userKey);//声明分布式锁
+//
+//        try {
+//            //3.1当前线程获取锁对象
+//            boolean isLock = redissonLock.tryLock();  //注意！！！！！！这里不要声明锁的失效时间，不然“watchDog看门狗“会失效
+//            if(!isLock){
+//                throw new BizIllegalException("业务超时，处理失败!");
+//            }
+//
+//            //3.2 这里获取当前类的代理对象，使用代理对象调用当前事务方法【保证事务的有效性，不然会失效】
+//            IUserCouponService userCouponProxy = (IUserCouponService) AopContext.currentProxy();
+//            userCouponProxy.saveCouponAndUserCouponInfo(id, userId, coupon);
+//        }finally {
+//            //3.3 删除锁
+//            redissonLock.unlock();
+//        }
+/*******************************************************************************************************************************/
+
+
+        /**
+         * 使用 AOP 注解进行加锁解锁操作
+         */
+
         String userKey = "lock:coupon:uid" + userId;
-        RLock redissonLock = redissonClient.getLock(userKey);//声明分布式锁
 
-        try {
-            //3.1当前线程获取锁对象
-            boolean isLock = redissonLock.tryLock();  //注意！！！！！！这里不要声明锁的失效时间，不然“watchDog看门狗“会失效
-            if(!isLock){
-                throw new BizIllegalException("业务超时，处理失败!");
-            }
+        //这里获取当前类的代理对象，使用代理对象调用当前事务方法【保证事务的有效性，不然会失效】
+        IUserCouponService userCouponProxy = (IUserCouponService) AopContext.currentProxy();
+        userCouponProxy.saveCouponAndUserCouponInfo(id, userId, coupon);
 
-            //3.2 这里获取当前类的代理对象，使用代理对象调用当前事务方法【保证事务的有效性，不然会失效】
-            IUserCouponService userCouponProxy = (IUserCouponService) AopContext.currentProxy();
-            userCouponProxy.saveCouponAndUserCouponInfo(id, userId, coupon);
-        }finally {
-            //3.3 删除锁
-            redissonLock.unlock();
-        }
 
     }
 
@@ -163,7 +179,8 @@ public class UserCouponRedissonServiceImpl extends ServiceImpl<UserCouponMapper,
      * *
      * *******************************************
      */
-    @Transactional
+    @MyLock(name = "userId")  //优先级高
+    @Transactional  //有默认的优先级，最低
     public void saveCouponAndUserCouponInfo(Long couponId, Long userId, Coupon coupon) {
 
         //4.是否超出每人限领数量
@@ -185,7 +202,7 @@ public class UserCouponRedissonServiceImpl extends ServiceImpl<UserCouponMapper,
 //        coupon.setIssueNum(coupon.getIssueNum()+1);
 //        couponMapper.updateById(coupon);
         /*
-            当前优惠券领取业务，再联机版下需要保证原子性 【这里使用 乐观锁 保证业务的原子性】
+            当前优惠券领取业务，在多机版下需要保证原子性 【这里使用 乐观锁 保证业务的原子性】
          */
         couponMapper.incrIssueNum(couponId);
 
