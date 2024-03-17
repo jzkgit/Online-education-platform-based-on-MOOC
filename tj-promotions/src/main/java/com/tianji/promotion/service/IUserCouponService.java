@@ -38,6 +38,9 @@ public interface IUserCouponService extends IService<UserCoupon> {
      * *
      * *******************************************
      */
-    void saveCouponAndUserCouponInfo(Long id, Long userId, Coupon coupon);
+//    void saveCouponAndUserCouponInfo(Long id, Long userId, Coupon coupon);
+
+    void saveCouponAndUserCouponInfo(UserCouponDTO msg);  //使用 MQ
+
 
 }

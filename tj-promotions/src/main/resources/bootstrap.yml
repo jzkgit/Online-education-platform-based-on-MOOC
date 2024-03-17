@@ -40,3 +40,13 @@ tj:
   auth:
     resource:
       enable: true
+
+
+# MQ 配置
+  mq:
+    listener:
+      retry:
+        stateless: false  #true：有状态   false:无状态  若业务中包含了事务，这里改为无状态
+
+
+

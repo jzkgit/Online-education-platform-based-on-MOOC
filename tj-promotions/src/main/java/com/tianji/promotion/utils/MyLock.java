@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * 自定义 AOP 注解
  */
 @Retention(RetentionPolicy.RUNTIME) //运行时生效
-@Target(ElementType.METHOD)
+@Target(ElementType.METHOD) //作用区域
 public @interface MyLock {
 
     /*
@@ -29,4 +29,5 @@ public @interface MyLock {
     MyLockType lockType() default MyLockType.RE_ENTRANT_LOCK;
 
     MyLockStrategy lockStrategy() default MyLockStrategy.FAIL_AFTER_RETRY_TIMEOUT;
+
 }

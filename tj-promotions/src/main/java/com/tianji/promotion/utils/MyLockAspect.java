@@ -11,10 +11,10 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 /**
- *  AOP 业务内容【从 redisson 中创建、获取、释放锁】
+ *  AOP 业务内容【使用 redisson 创建、获取、释放锁】
  */
-@Component
 @Aspect
+@Component
 @RequiredArgsConstructor
 public class MyLockAspect implements Ordered {
 
@@ -22,7 +22,7 @@ public class MyLockAspect implements Ordered {
 
 
     @Around("@annotation(myLock)")
-    public Object tryLock(ProceedingJoinPoint pjp, MyLock myLock) throws Throwable {
+    public Object tryLock(ProceedingJoinPoint pjp,MyLock myLock) throws Throwable {
         // 1.创建锁对象
         RLock lock = redissonClient.getLock(myLock.name()); //这里的锁名称，即锁的 key
 

@@ -11,7 +11,9 @@ import com.tianji.common.exceptions.BadRequestException;
 import com.tianji.common.exceptions.BizIllegalException;
 import com.tianji.common.utils.BeanUtils;
 import com.tianji.common.utils.CollUtils;
+import com.tianji.common.utils.DateUtils;
 import com.tianji.common.utils.UserContext;
+import com.tianji.promotion.constants.PromotionConstants;
 import com.tianji.promotion.domain.dto.CouponFormDTO;
 import com.tianji.promotion.domain.dto.CouponIssueFormDTO;
 import com.tianji.promotion.domain.po.Coupon;
@@ -62,6 +64,8 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
     final IExchangeCodeService codeService; //兑换码服务
 
     final IUserCouponService userCouponService;
+
+    final StringRedisTemplate redisTemplate;
 
 
     /**
@@ -229,17 +233,17 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
      * 发放优惠券
      */
     @Override
-    public void issueCoupons(Long id, CouponIssueFormDTO couponIssueFormDTO) {
+    public void issueCoupons(Long couponId, CouponIssueFormDTO couponIssueFormDTO) {
 
         log.debug("生成优惠券  线程池名称：{}",Thread.currentThread().getName());
 
         //0.校验参数
-        if(id==null||!id.equals(couponIssueFormDTO.getId())){
+        if(couponId==null||!couponId.equals(couponIssueFormDTO.getId())){
             throw new BadRequestException("非法参数!");
         }
 
         //1.校验当前优惠券的状态，只有待发放和暂停状态才能进行发放优惠券
-        Coupon coupon = couponService.getById(id);
+        Coupon coupon = couponService.getById(couponId);
         if(coupon==null||!coupon.getStatus().equals(DRAFT)||!coupon.getStatus().equals(PAUSE)){
             throw new BadRequestException("当前优惠券不存在或者在使用中!");
         }
@@ -267,12 +271,30 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon> impleme
         couponService.updateById(coupon);
 
 
-        //4.若发放优惠券时，选择的是指定发放，且之前的状态是待发放，则需要生成兑换码
+        /*
+             将需要立刻发放的优惠券信息【在 redis 中初始化符合条件的优惠券信息】，加快响应速率
+         */
+        //4.若当前优惠券是【立刻发放】，则将其数据存入 redis 的 hash 数据类型中【传值类型：1.优惠券ID 2.领卷开始结束时间 3.发行总数量 4.限领数量】
+        if(whetherIssue){
+
+            String couponKey = PromotionConstants.COUPON_CACHE_KEY_PREFIX+couponId;
+            redisTemplate.opsForHash().put(couponKey,"issue_begin_time",
+                    String.valueOf(DateUtils.toEpochMilli(couponIssueFormDTO.getIssueBeginTime())));
+            redisTemplate.opsForHash().put(couponKey,"issue_end_time",
+                    String.valueOf(DateUtils.toEpochMilli(couponIssueFormDTO.getIssueEndTime())));
+            redisTemplate.opsForHash().put(couponKey,"total_num",String.valueOf(coupon.getTotalNum()));
+            redisTemplate.opsForHash().put(couponKey,"user_limit",String.valueOf(coupon.getUserLimit()));
+        }
+
+
+
+        //5.若发放优惠券时，选择的是指定发放，且之前的状态是待发放，则需要生成兑换码
         if(coupon.getObtainWay().equals(ObtainType.ISSUE)&&coupon.getStatus().equals(DRAFT)){
 
             codeService.getExchangeCodeInfo(coupon);  //【异步】生成兑换码
         }
     }
+
 
 
     /**
